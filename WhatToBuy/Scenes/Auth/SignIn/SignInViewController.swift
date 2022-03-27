@@ -8,7 +8,6 @@
 import UIKit
 
 class SignInViewController: UIViewController {
-    var viewModel: SignInViewModel!
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -20,14 +19,17 @@ class SignInViewController: UIViewController {
         return label
     }()
     
-    private lazy var loginTextField: UITextField = {
+    private lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        textField.placeholder = "Логин"
+        textField.placeholder = "Email"
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.backgroundColor = UIColor(white: 1, alpha: 0.5)
         textField.setLeftPaddingPoints(12)
         textField.layer.cornerRadius = 10
+        textField.keyboardType = .emailAddress
+        textField.delegate = self
+        textField.returnKeyType = .next
         return textField
     }()
     
@@ -39,6 +41,9 @@ class SignInViewController: UIViewController {
         textField.backgroundColor = UIColor(white: 1, alpha: 0.5)
         textField.setLeftPaddingPoints(12)
         textField.layer.cornerRadius = 10
+        textField.isSecureTextEntry = true
+        textField.delegate = self
+        textField.returnKeyType = .done
         return textField
     }()
 
@@ -74,6 +79,17 @@ class SignInViewController: UIViewController {
         return button
     }()
     
+    let viewModel: SignInViewModel
+    
+    init(viewModel: SignInViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -85,11 +101,24 @@ class SignInViewController: UIViewController {
     }
 }
 
+extension SignInViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == emailTextField {
+            passwordTextField.becomeFirstResponder()
+        } else if textField == passwordTextField {
+            passwordTextField.resignFirstResponder()
+            signInTapped()
+        }
+        return true
+    }
+}
+
 extension SignInViewController {
     func configureView() {
         
+        hideKeyboardWhenTappedAround()
         view.backgroundColor = .systemBlue
-        let views = [titleLabel, loginTextField, passwordTextField, signUpButton, hintLabel, signInButton]
+        let views = [titleLabel, emailTextField, passwordTextField, signUpButton, hintLabel, signInButton]
         view.addSubviews(views)
         
         NSLayoutConstraint.activate([
@@ -97,12 +126,12 @@ extension SignInViewController {
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
-            loginTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12),
-            loginTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            loginTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            loginTextField.heightAnchor.constraint(equalToConstant: 45),
+            emailTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12),
+            emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            emailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            emailTextField.heightAnchor.constraint(equalToConstant: 45),
             
-            passwordTextField.topAnchor.constraint(equalTo: loginTextField.bottomAnchor, constant: 8),
+            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 8),
             passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             passwordTextField.heightAnchor.constraint(equalToConstant: 45),
@@ -126,6 +155,12 @@ extension SignInViewController {
     @objc
     private func signInTapped() {
         
+        UIView.transition(with: passwordTextField, duration: 1, options: .transitionCrossDissolve) {
+            self.passwordTextField.layer.borderWidth = 2
+            self.passwordTextField.layer.borderColor = UIColor.systemRed.cgColor
+        }
+
+        print("ok")
     }
     
     @objc

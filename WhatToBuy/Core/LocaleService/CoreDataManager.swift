@@ -10,6 +10,9 @@ import CoreData
 protocol CoreDataManagerProtocol {
     func saveProductList(productList: ProductList)
     func fetchProductList(_ completion: @escaping(([ProductList]) -> Void))
+    func addProductToProductList(id: String, product: Product)
+    func fetchProducts(_ completion: @escaping(([Product]) -> Void))
+    func deleteProductList(id: String)
 }
 
 final class CoreDataManager {
@@ -38,6 +41,7 @@ extension CoreDataManager: CoreDataManagerProtocol {
         productListMO.setValue(productList.name, forKey: "name")
         productListMO.setValue(productList.icon, forKey: "icon")
         productListMO.setValue(productList.color, forKey: "color")
+        productListMO.setValue(productList._id, forKey: "id")
         
         do {
             try moc.save()
@@ -54,6 +58,52 @@ extension CoreDataManager: CoreDataManagerProtocol {
             completion(productLists)
         } catch {
             print(error)
+        }
+    }
+    
+    func addProductToProductList(id: String, product: Product) {
+        guard let productList = getProductListById(id) else { return }
+        let productMO = ProductMO(context: moc)
+        productMO.setValue(product.name, forKey: "name")
+        productMO.setValue(product.count, forKey: "count")
+        productMO.setValue(product.category, forKey: "category")
+        productMO.setValue(product.price, forKey: "price")
+        productMO.productList = productList
+        productList.addToProducts(productMO)
+        
+        do {
+            try moc.save()
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func fetchProducts(_ completion: @escaping (([Product]) -> Void)) {
+        
+    }
+    
+    func deleteProductList(id: String) {
+        guard let productList = getProductListById(id) else { return }
+        moc.delete(productList)
+        do {
+            try moc.save()
+            print("Success")
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+}
+
+extension CoreDataManager {
+    private func getProductListById(_ id: String) -> ProductListMO? {
+        let fetchRequest: NSFetchRequest<ProductListMO> = ProductListMO.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id = %@", id)
+        do {
+            let lists = try moc.fetch(fetchRequest)
+            return lists.first
+        } catch {
+            print(error.localizedDescription)
+            return nil
         }
     }
 }

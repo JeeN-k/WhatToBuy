@@ -19,9 +19,23 @@ class ProductsViewController: UIViewController {
         return tableView
     }()
     
+    var viewModel: ProductsViewModelProtocol
+    
+    init(viewModel: ProductsViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        viewModel.fetchProducts { [weak self] in
+            self?.updateData()
+        }
     }
 }
 
@@ -29,12 +43,17 @@ class ProductsViewController: UIViewController {
 //MARK: - UITableViewDelegate & UITableViewDataSource
 extension ProductsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return viewModel.products.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-//        tableView.setEmptyMessage("Список пуст")
-        return 1
+        if viewModel.products.count == 0 {
+            tableView.setEmptyMessage("Список пуст")
+            return 0
+        } else {
+            tableView.restore()
+            return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -48,7 +67,8 @@ extension ProductsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "productCell", for: indexPath) as? ProductViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "productCell",
+                                                       for: indexPath) as? ProductViewCell else { return UITableViewCell() }
         return cell
     }
     
@@ -61,10 +81,12 @@ extension ProductsViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: - Private Methods
 extension ProductsViewController {
     private func configureView() {
-        title = "Some list title"
+        title = viewModel.titleForView()
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Добавить продукт", style: .done, target: self, action: nil)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Добавить продукт",
+                                                            style: .done, target: self,
+                                                            action: #selector(newProductTouched))
         
         view.addSubview(tableView)
         
@@ -74,5 +96,14 @@ extension ProductsViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+    }
+    
+    private func updateData() {
+        tableView.reloadData()
+    }
+    
+    @objc
+    private func newProductTouched() {
+        viewModel.addProduct()
     }
 }

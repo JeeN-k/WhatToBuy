@@ -8,8 +8,6 @@
 import UIKit
 
 class ListsViewController: UIViewController {
-    var viewModel: ListsViewModel?
-    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -21,6 +19,17 @@ class ListsViewController: UIViewController {
         return tableView
     }()
     
+    var viewModel: ListsViewModelProtocol
+    
+    init(viewModel: ListsViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -28,7 +37,7 @@ class ListsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        viewModel?.fetchLists { [weak self] in
+        viewModel.fetchLists { [weak self] in
             guard let self = self else { return }
             self.updateData()
         }
@@ -36,14 +45,30 @@ class ListsViewController: UIViewController {
 }
 
 
-//MARK: - UITableViewDelegate & UITableViewDataSource
-extension ListsViewController: UITableViewDelegate, UITableViewDataSource {
+//MARK: - UITableViewDelegate
+extension ListsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.selectProductList(indexPath: indexPath)
+    }
+}
+
+//MARK: - UITableViewDataSource
+extension ListsViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "listCell",
+                                                       for: indexPath) as? ListCellView else {
+            return UITableViewCell()
+        }
+        cell.viewModel = viewModel.viewModelForCell(indexPath: indexPath)
+        return cell
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel?.productLists.count ?? 0
+        return viewModel.productLists.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if viewModel?.productLists.count == 0 {
+        if viewModel.productLists.count == 0 {
             tableView.setEmptyMessage("Нет списков")
         } else {
             tableView.restore()
@@ -51,12 +76,11 @@ extension ListsViewController: UITableViewDelegate, UITableViewDataSource {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "listCell", for: indexPath) as? ListCellView else {
-            return UITableViewCell()
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            viewModel.removeProductListAt(indexPath)
+            tableView.deleteRows(at: [indexPath], with: .fade)
         }
-        cell.viewModel = viewModel?.viewModelForCell(indexPath: indexPath)
-        return cell
     }
 }
 
@@ -67,7 +91,10 @@ extension ListsViewController {
         title = "Списки"
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Добавить", style: .done, target: self, action: #selector(newListTouched))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Добавить",
+                                                            style: .done,
+                                                            target: self,
+                                                            action: #selector(newListTouched))
         
         view.addSubview(tableView)
         
@@ -84,6 +111,6 @@ extension ListsViewController {
     }
     
     @objc private func newListTouched() {
-        viewModel?.addNewList()
+        viewModel.addNewList()
     }
 }

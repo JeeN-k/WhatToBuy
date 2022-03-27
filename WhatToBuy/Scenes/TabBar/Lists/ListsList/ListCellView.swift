@@ -56,6 +56,7 @@ extension ListCellView {
         contentView.addSubview(cardView)
         cardView.addSubviews([iconView, nameLabel])
         selectionStyle = .none
+        contentView.layer.cornerRadius = 12
         
         NSLayoutConstraint.activate([
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),

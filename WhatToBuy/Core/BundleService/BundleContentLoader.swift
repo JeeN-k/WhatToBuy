@@ -13,7 +13,7 @@ struct BundleContentLoader {
         case fileDecodingFailed(name: String, Swift.Error)
     }
     
-    func loadBundledContent(fromFileNamed name: String) throws -> ProductSectionsBundle {
+    func loadBundledContent(fromFileNamed name: String) throws -> ProductCategoriesBundle {
         guard let url = Bundle.main.url(
             forResource: name,
             withExtension: "json"
@@ -24,7 +24,7 @@ struct BundleContentLoader {
         do {
             let data = try Data(contentsOf: url)
             let decoder = JSONDecoder()
-            return try decoder.decode(ProductSectionsBundle.self, from: data)
+            return try decoder.decode(ProductCategoriesBundle.self, from: data)
         } catch {
             throw Error.fileDecodingFailed(name: name, error)
         }

@@ -8,7 +8,6 @@
 import UIKit
 
 class SignUpViewController: UIViewController {
-    var viewModel: SignUpViewModel!
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -28,17 +27,22 @@ class SignUpViewController: UIViewController {
         textField.backgroundColor = UIColor(white: 1, alpha: 0.5)
         textField.setLeftPaddingPoints(12)
         textField.layer.cornerRadius = 10
+        textField.delegate = self
+        textField.returnKeyType = .next
         return textField
     }()
     
-    private lazy var loginTextField: UITextField = {
+    private lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        textField.placeholder = "Логин"
+        textField.placeholder = "Email"
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.backgroundColor = UIColor(white: 1, alpha: 0.5)
         textField.setLeftPaddingPoints(12)
         textField.layer.cornerRadius = 10
+        textField.keyboardType = .emailAddress
+        textField.delegate = self
+        textField.returnKeyType = .next
         return textField
     }()
     
@@ -50,6 +54,9 @@ class SignUpViewController: UIViewController {
         textField.backgroundColor = UIColor(white: 1, alpha: 0.5)
         textField.setLeftPaddingPoints(12)
         textField.layer.cornerRadius = 10
+        textField.isSecureTextEntry = true
+        textField.delegate = self
+        textField.returnKeyType = .done
         return textField
     }()
 
@@ -60,6 +67,7 @@ class SignUpViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(signUpTouched), for: .touchUpInside)
         button.backgroundColor = .white
         return button
     }()
@@ -84,17 +92,43 @@ class SignUpViewController: UIViewController {
         return button
     }()
     
+    let viewModel: SignUpViewModel
+    
+    init(viewModel: SignUpViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
     }
 }
 
+extension SignUpViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == nameTextField {
+            emailTextField.becomeFirstResponder()
+        } else if textField == emailTextField {
+            passwordTextField.becomeFirstResponder()
+        } else if textField == passwordTextField {
+            passwordTextField.resignFirstResponder()
+            signUpTouched()
+        }
+        return true
+    }
+}
+
 extension SignUpViewController {
     func configureView() {
         
+        hideKeyboardWhenTappedAround()
         view.backgroundColor = .systemBlue
-        let views = [titleLabel, nameTextField, loginTextField, passwordTextField, signUpButton, hintLabel, signInButton]
+        let views = [titleLabel, nameTextField, emailTextField, passwordTextField, signUpButton, hintLabel, signInButton]
         view.addSubviews(views)
         
         NSLayoutConstraint.activate([
@@ -107,12 +141,12 @@ extension SignUpViewController {
             nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             nameTextField.heightAnchor.constraint(equalToConstant: 45),
             
-            loginTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 8),
-            loginTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            loginTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            loginTextField.heightAnchor.constraint(equalToConstant: 45),
+            emailTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 8),
+            emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            emailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            emailTextField.heightAnchor.constraint(equalToConstant: 45),
             
-            passwordTextField.topAnchor.constraint(equalTo: loginTextField.bottomAnchor, constant: 8),
+            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 8),
             passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             passwordTextField.heightAnchor.constraint(equalToConstant: 45),
@@ -136,6 +170,11 @@ extension SignUpViewController {
     @objc
     private func signInTouched() {
         viewModel.goToSignIn()
+    }
+    
+    @objc
+    private func signUpTouched() {
+        print("SignUP")
     }
 }
 

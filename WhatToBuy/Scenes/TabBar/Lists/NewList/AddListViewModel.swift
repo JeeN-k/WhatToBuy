@@ -8,11 +8,14 @@
 import Foundation
 
 final class AddListViewModel {
-    let dataProvider: DataProviderProtocol = DataProvider()
-    weak var coordinator: ListsCoordinator?
+    let dataProvider: DataProviderProtocol
     var pickerSelection: PickerSelection = PickerSelection(icon: Icons.allCases[0].rawValue,
                                                            color: Colors.allCases[0].getColorHex())
     var didSentEventClosure: ((AddListViewModel.Event) -> Void)?
+    
+    init(dataProvider: DataProviderProtocol) {
+        self.dataProvider = dataProvider
+    }
     
     func cancelAdding() {
         didSentEventClosure?(.cancel)
@@ -20,7 +23,9 @@ final class AddListViewModel {
     
     func createNewList(name: String?) {
         guard let name = name, name != "" else { return }
-        let productList = ProductList(_id: UUID().uuidString, name: name, icon: pickerSelection.icon, color: pickerSelection.color)
+        let productList = ProductList(_id: UUID().uuidString, name: name,
+                                      icon: pickerSelection.icon,
+                                      color: pickerSelection.color)
         dataProvider.createNewList(productList: productList)
         didSentEventClosure?(.addList)
     }

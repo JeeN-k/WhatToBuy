@@ -18,16 +18,22 @@ class NewProductsCategoriesViewController: UIViewController {
         return tableView
     }()
     
-    var product: ProductSectionsBundle?
+    let viewModel: NewProductsCategoriesViewModelProtocol
+    
+    init(viewModel: NewProductsCategoriesViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        let dataprovider: DataProviderProtocol = DataProvider()
-        dataprovider.fetchLocalProducts { products in
-            self.product = products
-            self.tableView.reloadData()
-            
+        viewModel.fetchProductCategories { [weak self] in
+            self?.updateData()
         }
     }
 }
@@ -35,22 +41,22 @@ class NewProductsCategoriesViewController: UIViewController {
 //MARK: - UITableViewDelegate & UITableViewDataSource
 extension NewProductsCategoriesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return product?.sections.count ?? 0
+        return viewModel.productCategories.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-//        tableView.setEmptyMessage("Список пуст")
         return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "newProductCategoryCell", for: indexPath)
-        cell.textLabel?.text = product?.sections[indexPath.row].name
+        cell.textLabel?.text = viewModel.productCategories[indexPath.row].name
         cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.categorySelected(at: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
@@ -59,6 +65,7 @@ extension NewProductsCategoriesViewController: UITableViewDelegate, UITableViewD
 // MARK: - Private Methods
 extension NewProductsCategoriesViewController {
     private func configureView() {
+        title = "Категории"
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
         
@@ -70,6 +77,10 @@ extension NewProductsCategoriesViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+    }
+    
+    private func updateData() {
+        self.tableView.reloadData()
     }
 }
 

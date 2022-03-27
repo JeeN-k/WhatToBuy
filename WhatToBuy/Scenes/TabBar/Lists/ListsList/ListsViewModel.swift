@@ -7,11 +7,23 @@
 
 import Foundation
 
-final class ListsViewModel {
-    weak var coordinator: ListsCoordinatorProtocol?
+protocol ListsViewModelProtocol {
+    var productLists: [ProductList] { get }
+    func addNewList()
+    func fetchLists(_ completion: @escaping(() -> Void))
+    func viewModelForCell(indexPath: IndexPath) -> ListCellViewModel
+    func selectProductList(indexPath: IndexPath)
+    func removeProductListAt(_ indexPath: IndexPath)
+}
+
+final class ListsViewModel: ListsViewModelProtocol {
+    var dataProvider: DataProviderProtocol
     var didSentEventClosure: ((ListsViewModel.Event) -> Void)?
-    var dataProvider: DataProviderProtocol = DataProvider()
     var productLists: [ProductList] = []
+    
+    init(dataProvider: DataProviderProtocol) {
+        self.dataProvider = dataProvider
+    }
     
     func addNewList() {
         didSentEventClosure?(.addList)
@@ -26,6 +38,17 @@ final class ListsViewModel {
         }
     }
     
+    func removeProductListAt(_ indexPath: IndexPath) {
+        let productListID = productLists[indexPath.row]._id
+        productLists.remove(at: indexPath.row)
+        dataProvider.deleteProductList(productListID: productListID)
+    }
+    
+    func selectProductList(indexPath: IndexPath) {
+        let productList = productLists[indexPath.row]
+        didSentEventClosure?(.selectProductList(list: productList))
+    }
+    
     func viewModelForCell(indexPath: IndexPath) -> ListCellViewModel {
         return ListCellViewModel(productList: productLists[indexPath.row])
     }
@@ -34,5 +57,6 @@ final class ListsViewModel {
 extension ListsViewModel {
     enum Event {
         case addList
+        case selectProductList(list: ProductList)
     }
 }

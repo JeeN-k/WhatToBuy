@@ -27,18 +27,16 @@ class AuthCoordinator: AuthCoordinatorProtocol {
     }
     
     func showSignInViewController() {
-        let signInViewController = SignInViewController()
         let signInViewModel = SignInViewModel()
+        let signInViewController = SignInViewController(viewModel: signInViewModel)
         signInViewModel.coordinator = self
-        signInViewController.viewModel = signInViewModel
         navigationController.pushViewController(signInViewController, animated: true)
     }
     
     func showSignUpViewController() {
-        let signUpViewController = SignUpViewController()
         let signUpViewModel = SignUpViewModel()
+        let signUpViewController = SignUpViewController(viewModel: signUpViewModel)
         signUpViewModel.coordinator = self
-        signUpViewController.viewModel = signUpViewModel
         navigationController.pushViewController(signUpViewController, animated: true)
     }
     

@@ -8,8 +8,6 @@
 import UIKit
 
 class AddListViewController: UIViewController {
-    var viewModel: AddListViewModel?
-    
     private lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -34,6 +32,17 @@ class AddListViewController: UIViewController {
         pickerView.tintColor = .blue
         return pickerView
     }()
+    
+    var viewModel: AddListViewModel
+    
+    init(viewModel: AddListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,9 +84,9 @@ extension AddListViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if component == 1 {
-            viewModel?.pickerSelection.icon = Icons.allCases[row].rawValue
+            viewModel.pickerSelection.icon = Icons.allCases[row].rawValue
         } else {
-            viewModel?.pickerSelection.color = Colors.allCases[row].getColorHex()
+            viewModel.pickerSelection.color = Colors.allCases[row].getColorHex()
         }
     }
 }
@@ -88,8 +97,12 @@ extension AddListViewController {
         view.backgroundColor = .systemBackground
         title = "Добавить список"
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelAddingTouched))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(addListTouched))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
+                                                           target: self,
+                                                           action: #selector(cancelAddingTouched))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
+                                                            target: self,
+                                                            action: #selector(addListTouched))
         let views = [nameTextField, colorLabel, colorPicker]
         view.addSubviews(views)
         
@@ -111,11 +124,11 @@ extension AddListViewController {
     
     @objc
     private func cancelAddingTouched() {
-        viewModel?.cancelAdding()
+        viewModel.cancelAdding()
     }
     
     @objc
     private func addListTouched() {
-        viewModel?.createNewList(name: nameTextField.text)
+        viewModel.createNewList(name: nameTextField.text)
     }
 }

@@ -13,4 +13,8 @@ final class SignInViewModel {
     func goToRegister() {
         coordinator.showSignUpViewController()
     }
+    
+    func signIn(email: String, password: String) {
+        
+    }
 }

@@ -7,11 +7,7 @@
 
 import UIKit
 
-protocol ListsCoordinatorProtocol: Coordinator {
-    func showListsViewController()
-}
-
-class ListsCoordinator: ListsCoordinatorProtocol {
+class ListsCoordinator: Coordinator {
     var finishDelegate: CoordinatorFinishDelegate?
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
@@ -25,23 +21,58 @@ class ListsCoordinator: ListsCoordinatorProtocol {
         showListsViewController()
     }
     
-    func showListsViewController() {
-        let listsViewController = ListsViewController()
-        let listsViewModel = ListsViewModel()
-        listsViewModel.coordinator = self
+    private func showListsViewController() {
+        let dataProvider: DataProviderProtocol = DataProvider()
+        let listsViewModel = ListsViewModel(dataProvider: dataProvider)
+        let listsViewController = ListsViewController(viewModel: listsViewModel)
         listsViewModel.didSentEventClosure = { [weak self] event in
-            if event == .addList {
+            switch event {
+            case .addList:
                 self?.showNewListViewController()
+            case .selectProductList(let list):
+                self?.showProductsViewController(productList: list)
             }
         }
-        listsViewController.viewModel = listsViewModel
         navigationController.pushViewController(listsViewController, animated: true)
     }
     
+    func showProductsViewController(productList: ProductList) {
+        let dataProvider: DataProviderProtocol = DataProvider()
+        let productsViewModel = ProductsViewModel(dataProvider: dataProvider, productList: productList)
+        let productsViewController = ProductsViewController(viewModel: productsViewModel)
+        productsViewModel.didSentEventClosure = { [weak self] event in
+            switch event {
+            case .addProduct(let products):
+                self?.showNewProductCategoryViewController(products: products)
+            }
+        }
+        navigationController.pushViewController(productsViewController, animated: true)
+    }
+    
+    func showNewProductCategoryViewController(products: [Product]) {
+        let dataProvider: DataProviderProtocol = DataProvider()
+        let newProductCategoryViewModel = NewProductsCategoriesViewModel(dataProvider: dataProvider, products: products)
+        let newProductCategoryController = NewProductsCategoriesViewController(viewModel: newProductCategoryViewModel)
+        newProductCategoryViewModel.didSentEventClosure = { [weak self] event in
+            switch event {
+            case .selectCategory(let category, let products):
+                self?.showProductsOfCategory(productCategory: category)
+            }
+        }
+        navigationController.pushViewController(newProductCategoryController, animated: true)
+    }
+    
+    func showProductsOfCategory(productCategory: ProductCategoryBundle) {
+        let dataProvider: DataProviderProtocol = DataProvider()
+        let newProductsViewModel = NewProductViewModel(dataProvider: dataProvider, productCategory: productCategory)
+        let newProductsViewConrtoller = NewProductViewController(viewModel: newProductsViewModel)
+        navigationController.pushViewController(newProductsViewConrtoller, animated: true)
+    }
+    
     func showNewListViewController() {
-        let newListViewController = AddListViewController()
-        let newListViewModel = AddListViewModel()
-        newListViewModel.coordinator = self
+        let dataProvider: DataProviderProtocol = DataProvider()
+        let newListViewModel = AddListViewModel(dataProvider: dataProvider)
+        let newListViewController = AddListViewController(viewModel: newListViewModel)
         newListViewModel.didSentEventClosure = { [weak self] event in
             switch event {
             case .addList:
@@ -55,6 +86,6 @@ class ListsCoordinator: ListsCoordinatorProtocol {
     }
     
     deinit {
-        print("AuthCoordinator deinited")
+        print("ListsCoordinator deinited")
     }
 }

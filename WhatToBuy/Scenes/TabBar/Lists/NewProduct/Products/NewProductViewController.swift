@@ -1,5 +1,5 @@
 //
-//  NewProductsViewController.swift
+//  NewProductViewController.swift
 //  WhatToBuy
 //
 //  Created by Oleg Stepanov on 25.03.2022.
@@ -7,14 +7,15 @@
 
 import UIKit
 
-class NewProductsViewController: UIViewController {
+class NewProductViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "newProductCell")
+        tableView.rowHeight = 56
+        tableView.register(NewProductCellView.self, forCellReuseIdentifier: "newProductCell")
         return tableView
     }()
     
@@ -26,43 +27,45 @@ class NewProductsViewController: UIViewController {
         return searchBar
     }()
     
-    var product: [ProductCategoriesBundle] = []
-    var filteredProducts: [ProductCategoriesBundle] = []
-    
     var isSearchBarEmpty: Bool {
         return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    let viewModel: NewProductViewModelProtocol
+    
+    init(viewModel: NewProductViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        let dataprovider: DataProviderProtocol = DataProvider()
-        dataprovider.fetchLocalProducts { products in
-            self.product = products!.sections[0].categories
-            self.tableView.reloadData()
-        }
     }
 }
 
 //MARK: - UITableViewDelegate & UITableViewDataSource
-extension NewProductsViewController: UITableViewDelegate, UITableViewDataSource {
+extension NewProductViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return product[section].items.count
+        return viewModel.productCategory.sections[section].items.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        //        tableView.setEmptyMessage("Список пуст")
-        return product.count
+        return viewModel.productCategory.sections.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return product[section].name
+        return viewModel.productCategory.sections[section].name
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "newProductCell", for: indexPath)
-        cell.textLabel?.text = product[indexPath.section].items[indexPath.row]
-        cell.accessoryType = .disclosureIndicator
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "newProductCell", for: indexPath)
+                as? NewProductCellView else { return UITableViewCell() }
+        cell.viewModel = viewModel.viewModelForCell(at: indexPath)
         return cell
     }
     
@@ -71,7 +74,7 @@ extension NewProductsViewController: UITableViewDelegate, UITableViewDataSource 
     }
 }
 
-extension NewProductsViewController: UISearchResultsUpdating {
+extension NewProductViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         
     }
@@ -79,8 +82,9 @@ extension NewProductsViewController: UISearchResultsUpdating {
 
 
 // MARK: - Private Methods
-extension NewProductsViewController {
+extension NewProductViewController {
     private func configureView() {
+        title = viewModel.titleForView()
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = searchController
