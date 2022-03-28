@@ -11,7 +11,7 @@ protocol CoreDataManagerProtocol {
     func saveProductList(productList: ProductList)
     func fetchProductList(_ completion: @escaping(([ProductList]) -> Void))
     func addProductToProductList(id: String, product: Product)
-    func fetchProducts(_ completion: @escaping(([Product]) -> Void))
+    func fetchProducts(listId: String, completion: @escaping([Product]) -> Void)
     func deleteProductList(id: String)
 }
 
@@ -78,8 +78,11 @@ extension CoreDataManager: CoreDataManagerProtocol {
         }
     }
     
-    func fetchProducts(_ completion: @escaping (([Product]) -> Void)) {
-        
+    func fetchProducts(listId: String, completion: @escaping([Product]) -> Void) {
+        guard let productList = getProductListById(listId) else { return }
+        guard let productsMO = productList.products else { return }
+        let products = Array(productsMO).map({ Product(record: $0) })
+        completion(products)
     }
     
     func deleteProductList(id: String) {

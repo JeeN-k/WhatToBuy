@@ -42,31 +42,11 @@ class ListsCoordinator: Coordinator {
         let productsViewController = ProductsViewController(viewModel: productsViewModel)
         productsViewModel.didSentEventClosure = { [weak self] event in
             switch event {
-            case .addProduct(let products):
-                self?.showNewProductCategoryViewController(products: products)
+            case .addProduct(let products, let productListId):
+                self?.showNewProductFlow(currentProducts: products, productListId: productListId)
             }
         }
         navigationController.pushViewController(productsViewController, animated: true)
-    }
-    
-    func showNewProductCategoryViewController(products: [Product]) {
-        let dataProvider: DataProviderProtocol = DataProvider()
-        let newProductCategoryViewModel = NewProductsCategoriesViewModel(dataProvider: dataProvider, products: products)
-        let newProductCategoryController = NewProductsCategoriesViewController(viewModel: newProductCategoryViewModel)
-        newProductCategoryViewModel.didSentEventClosure = { [weak self] event in
-            switch event {
-            case .selectCategory(let category, let products):
-                self?.showProductsOfCategory(productCategory: category)
-            }
-        }
-        navigationController.pushViewController(newProductCategoryController, animated: true)
-    }
-    
-    func showProductsOfCategory(productCategory: ProductCategoryBundle) {
-        let dataProvider: DataProviderProtocol = DataProvider()
-        let newProductsViewModel = NewProductViewModel(dataProvider: dataProvider, productCategory: productCategory)
-        let newProductsViewConrtoller = NewProductViewController(viewModel: newProductsViewModel)
-        navigationController.pushViewController(newProductsViewConrtoller, animated: true)
     }
     
     func showNewListViewController() {
@@ -85,7 +65,22 @@ class ListsCoordinator: Coordinator {
         navigationController.pushViewController(newListViewController, animated: true)
     }
     
+    private func showNewProductFlow(currentProducts: [Product], productListId: String) {
+        let newProductCoordinator = NewProductCoordinator(navigationController)
+        newProductCoordinator.products = currentProducts
+        newProductCoordinator.productListID = productListId
+        newProductCoordinator.finishDelegate = self
+        newProductCoordinator.start()
+        childCoordinators.append(newProductCoordinator)
+    }
+    
     deinit {
         print("ListsCoordinator deinited")
+    }
+}
+
+extension ListsCoordinator: CoordinatorFinishDelegate {
+    func coordinatorDidFinish(childCoordinator: Coordinator) {
+        
     }
 }

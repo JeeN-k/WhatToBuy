@@ -19,7 +19,11 @@ final class MainCoordinator: Coordinator {
     }
     
     func start() {
-        showAuthFlow()
+        if TokenManager.tokenExists {
+            showTabBarFlow()
+        } else {
+            showAuthFlow()
+        }
     }
     
     private func showAuthFlow() {

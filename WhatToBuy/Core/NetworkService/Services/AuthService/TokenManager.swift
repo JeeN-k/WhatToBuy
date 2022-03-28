@@ -24,4 +24,9 @@ class TokenManager {
     static func removeAuthToken() {
         userDefaults.removeObject(forKey: "token")
     }
+    
+    static func apiKey() -> String? {
+        guard let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String else { return nil }
+        return apiKey
+    }
 }

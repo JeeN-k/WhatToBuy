@@ -43,22 +43,30 @@ extension NetworkService: NetworkServiceProtocol {
         }
         
         var urlRequest = URLRequest(url: url)
+        
         urlRequest.httpMethod = request.method.rawValue
         urlRequest.allHTTPHeaderFields = request.headers
+        if let httpBody = request.httpBody {
+            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.addValue("application/json", forHTTPHeaderField: "Accept")
+            urlRequest.httpBody = httpBody
+        }
         
         URLSession.shared.dataTask(with: urlRequest) { data, response, error in
             if let error = error {
                 return completion(.failure(error))
             }
             
-            guard let data = data, let response = response as? HTTPURLResponse, 200..<300 ~= response.statusCode else {
+            guard let data = data else {
                 return completion(.failure(RequestErrors.responseError))
             }
             
-            do {
-                try completion(.success(request.decode(data)))
-            } catch let error {
-                completion(.failure(error))
+            DispatchQueue.main.async {
+                do {
+                    try completion(.success(request.decode(data)))
+                } catch let error {
+                    completion(.failure(error))
+                }
             }
             
         }.resume()

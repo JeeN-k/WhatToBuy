@@ -30,6 +30,7 @@ final class ProductViewCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 17)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "5"
+        label.isHidden = true
         return label
     }()
     
@@ -39,8 +40,25 @@ final class ProductViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .systemGray
         label.text = "120P"
+        label.isHidden = true
         return label
     }()
+    
+    var viewModel: ProductCellViewModel? {
+        didSet {
+            guard let viewModel = viewModel else { return }
+            titleLabel.text = viewModel.name
+            categoryLabel.text = viewModel.category
+            if let count = viewModel.count, count != 0 {
+                countLabel.isHidden = false
+                countLabel.text = "\(count) шт"
+            }
+            if let price = viewModel.price, price != 0 {
+                priceLabel.isHidden = false
+                priceLabel.text = "\(price) P"
+            }
+        }
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -59,9 +77,6 @@ extension ProductViewCell {
         contentView.addSubviews(views)
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            
             categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             categoryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             
@@ -69,7 +84,11 @@ extension ProductViewCell {
             countLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
             priceLabel.trailingAnchor.constraint(equalTo: countLabel.leadingAnchor, constant: -28),
-            priceLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            priceLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: priceLabel.leadingAnchor, constant: -5)
         ])
     }
 }

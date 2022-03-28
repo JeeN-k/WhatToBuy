@@ -45,6 +45,9 @@ class NewProductViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        viewModel.products.bind { _ in
+            self.reloadView()
+        }
     }
 }
 
@@ -70,6 +73,7 @@ extension NewProductViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.productTouched(at: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
@@ -98,6 +102,10 @@ extension NewProductViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+    }
+    
+    private func reloadView() {
+        tableView.reloadData()
     }
 }
 

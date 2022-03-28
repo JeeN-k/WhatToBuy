@@ -29,6 +29,7 @@ class SignUpViewController: UIViewController {
         textField.layer.cornerRadius = 10
         textField.delegate = self
         textField.returnKeyType = .next
+        textField.addTarget(self, action: #selector(textFieldTextChanged), for: .editingChanged)
         return textField
     }()
     
@@ -43,6 +44,7 @@ class SignUpViewController: UIViewController {
         textField.keyboardType = .emailAddress
         textField.delegate = self
         textField.returnKeyType = .next
+        textField.addTarget(self, action: #selector(textFieldTextChanged), for: .editingChanged)
         return textField
     }()
     
@@ -57,6 +59,7 @@ class SignUpViewController: UIViewController {
         textField.isSecureTextEntry = true
         textField.delegate = self
         textField.returnKeyType = .done
+        textField.addTarget(self, action: #selector(textFieldTextChanged), for: .editingChanged)
         return textField
     }()
 
@@ -64,11 +67,14 @@ class SignUpViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Создать аккаунт", for: .normal)
         button.setTitleColor(UIColor.black, for: .normal)
+        button.setTitleColor(UIColor.systemGray, for: .disabled)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(signUpTouched), for: .touchUpInside)
         button.backgroundColor = .white
+        button.isEnabled = false
+        button.alpha = 0.5
         return button
     }()
     
@@ -92,9 +98,9 @@ class SignUpViewController: UIViewController {
         return button
     }()
     
-    let viewModel: SignUpViewModel
+    let viewModel: SignUpViewModelProtocol
     
-    init(viewModel: SignUpViewModel) {
+    init(viewModel: SignUpViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -162,8 +168,7 @@ extension SignUpViewController {
             
             signInButton.topAnchor.constraint(equalTo: hintLabel.topAnchor),
             signInButton.leadingAnchor.constraint(equalTo: hintLabel.trailingAnchor, constant: 5),
-            signInButton.heightAnchor.constraint(equalToConstant: 20),
-            
+            signInButton.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
     
@@ -174,7 +179,23 @@ extension SignUpViewController {
     
     @objc
     private func signUpTouched() {
-        print("SignUP")
+        guard let name = nameTextField.text,
+                let password = passwordTextField.text,
+                let email = emailTextField.text else { return }
+        viewModel.signUpUser(name: name, password: password, email: email) { [weak self] message in
+            self?.showAlertWith(text: message)
+        }
+    }
+    
+    @objc
+    private func textFieldTextChanged() {
+        if nameTextField.text == "" || emailTextField.text == "" || passwordTextField.text == "" {
+            signUpButton.isEnabled = false
+            signUpButton.alpha = 0.5
+        } else {
+            signUpButton.isEnabled = true
+            signUpButton.alpha = 1
+        }
     }
 }
 

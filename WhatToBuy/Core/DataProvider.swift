@@ -11,8 +11,9 @@ protocol DataProviderProtocol {
     func fetchLocalProducts(completion: @escaping((ProductCategoriesBundle?) -> Void))
     func fetchLists(completion: @escaping(([ProductList]?) -> Void))
     func createNewList(productList: ProductList)
-    func fetchProduts(completion: @escaping(([Product]?) -> Void))
+    func fetchProduts(productListID: String, completion: @escaping([Product]?) -> Void)
     func deleteProductList(productListID: String)
+    func addProductToList(product: Product, productListID: String)
 }
 
 class DataProvider: DataProviderProtocol {
@@ -43,9 +44,9 @@ class DataProvider: DataProviderProtocol {
         }
     }
     
-    func fetchProduts(completion: @escaping (([Product]?) -> Void)) {
+    func fetchProduts(productListID: String, completion: @escaping([Product]?) -> Void) {
         if isOfflineMode {
-            coreDataManager.fetchProducts { products in
+            coreDataManager.fetchProducts(listId: productListID) { products in
                 completion(products)
             }
         } else {
@@ -56,6 +57,14 @@ class DataProvider: DataProviderProtocol {
     func deleteProductList(productListID: String) {
         if isOfflineMode {
             coreDataManager.deleteProductList(id: productListID)
+        } else {
+            
+        }
+    }
+    
+    func addProductToList(product: Product, productListID: String) {
+        if isOfflineMode {
+            coreDataManager.addProductToProductList(id: productListID, product: product)
         } else {
             
         }

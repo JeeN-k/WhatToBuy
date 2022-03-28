@@ -30,6 +30,7 @@ class SignInViewController: UIViewController {
         textField.keyboardType = .emailAddress
         textField.delegate = self
         textField.returnKeyType = .next
+        textField.addTarget(self, action: #selector(textFieldTextChanged), for: .editingChanged)
         return textField
     }()
     
@@ -44,6 +45,7 @@ class SignInViewController: UIViewController {
         textField.isSecureTextEntry = true
         textField.delegate = self
         textField.returnKeyType = .done
+        textField.addTarget(self, action: #selector(textFieldTextChanged), for: .editingChanged)
         return textField
     }()
 
@@ -51,11 +53,14 @@ class SignInViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Войти", for: .normal)
         button.setTitleColor(UIColor.black, for: .normal)
+        button.setTitleColor(UIColor.systemGray, for: .disabled)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .white
         button.addTarget(self, action: #selector(signInTapped), for: .touchUpInside)
+        button.alpha = 0.5
+        button.isEnabled = false
         return button
     }()
     
@@ -79,9 +84,9 @@ class SignInViewController: UIViewController {
         return button
     }()
     
-    let viewModel: SignInViewModel
+    let viewModel: SignInViewModelProtocol
     
-    init(viewModel: SignInViewModel) {
+    init(viewModel: SignInViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -148,19 +153,26 @@ extension SignInViewController {
             signUpButton.topAnchor.constraint(equalTo: hintLabel.topAnchor),
             signUpButton.leadingAnchor.constraint(equalTo: hintLabel.trailingAnchor, constant: 5),
             signUpButton.heightAnchor.constraint(equalToConstant: 20),
-            
         ])
     }
     
     @objc
-    private func signInTapped() {
-        
-        UIView.transition(with: passwordTextField, duration: 1, options: .transitionCrossDissolve) {
-            self.passwordTextField.layer.borderWidth = 2
-            self.passwordTextField.layer.borderColor = UIColor.systemRed.cgColor
+    private func textFieldTextChanged() {
+        if emailTextField.text == "" || passwordTextField.text == "" {
+            signInButton.isEnabled = false
+            signInButton.alpha = 0.5
+        } else {
+            signInButton.isEnabled = true
+            signInButton.alpha = 1
         }
-
-        print("ok")
+    }
+    
+    @objc
+    private func signInTapped() {
+        guard let email = emailTextField.text, let password = passwordTextField.text else { return }
+        viewModel.signIn(email: email, password: password) { [weak self] message in
+            self?.showAlertWith(text: message)
+        }
     }
     
     @objc

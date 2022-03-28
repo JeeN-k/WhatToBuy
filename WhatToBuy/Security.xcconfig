@@ -1,0 +1,11 @@
+//
+//  Security.xcconfig
+//  WhatToBuy
+//
+//  Created by Oleg Stepanov on 28.03.2022.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+API_KEY = "rDJEb8gbEO6VhN984JqI"

@@ -56,19 +56,20 @@ extension ProductsViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        let header = view as! UITableViewHeaderFooterView
-        header.textLabel?.textColor = .systemPink
-        header.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Fruits"
-    }
+//    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+//        let header = view as! UITableViewHeaderFooterView
+//        header.textLabel?.textColor = .systemPink
+//        header.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+//    }
+//
+//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return "Fruits"
+//    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "productCell",
                                                        for: indexPath) as? ProductViewCell else { return UITableViewCell() }
+        cell.viewModel = viewModel.viewModelForCell(at: indexPath)
         return cell
     }
     

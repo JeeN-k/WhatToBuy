@@ -12,6 +12,7 @@ protocol ProductsViewModelProtocol {
     func fetchProducts(completion: @escaping(() -> Void))
     func titleForView() -> String
     func addProduct()
+    func viewModelForCell(at indexPath: IndexPath) -> ProductCellViewModel
 }
 
 final class ProductsViewModel: ProductsViewModelProtocol {
@@ -27,7 +28,7 @@ final class ProductsViewModel: ProductsViewModelProtocol {
     }
     
     func fetchProducts(completion: @escaping(() -> Void)) {
-        dataProvider.fetchProduts { [weak self] products in
+        dataProvider.fetchProduts(productListID: productList._id) { [weak self] products in
             guard let self = self, let products = products else { return }
             self.products = products
             completion()
@@ -35,17 +36,21 @@ final class ProductsViewModel: ProductsViewModelProtocol {
     }
     
     func addProduct() {
-        didSentEventClosure?(.addProduct(products))
+        didSentEventClosure?(.addProduct(products, productList._id))
     }
     
     func titleForView() -> String {
         return productList.name
     }
     
+    func viewModelForCell(at indexPath: IndexPath) -> ProductCellViewModel {
+        let product = products[indexPath.row]
+        return ProductCellViewModel(product: product)
+    }
 }
 
 extension ProductsViewModel {
     enum Event {
-        case addProduct([Product])
+        case addProduct([Product], String)
     }
 }

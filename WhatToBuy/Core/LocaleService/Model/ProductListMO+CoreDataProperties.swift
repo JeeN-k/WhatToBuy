@@ -20,7 +20,7 @@ extension ProductListMO {
     @NSManaged public var color: String
     @NSManaged public var icon: String
     @NSManaged public var id: String
-    @NSManaged public var products: NSSet?
+    @NSManaged public var products: Set<ProductMO>?
 
 }
 

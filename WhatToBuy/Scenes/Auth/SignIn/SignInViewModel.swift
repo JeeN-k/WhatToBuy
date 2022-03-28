@@ -7,14 +7,38 @@
 
 import Foundation
 
-final class SignInViewModel {
-    weak var coordinator: AuthCoordinator!
+protocol SignInViewModelProtocol {
+    func signIn(email: String, password: String, completion: @escaping(String) -> Void)
+    func goToRegister()
+}
+
+final class SignInViewModel: SignInViewModelProtocol {
+    let authService: AuthenticationServiceProtocol
+    var didSentEventClosure: ((SignInViewModel.Event) -> Void)?
     
-    func goToRegister() {
-        coordinator.showSignUpViewController()
+    init(authService: AuthenticationServiceProtocol) {
+        self.authService = authService
     }
     
-    func signIn(email: String, password: String) {
-        
+    func goToRegister() {
+        didSentEventClosure?(.showRegister)
+    }
+    
+    func signIn(email: String, password: String, completion: @escaping(String) -> Void) {
+        let user = User(email: email, password: password)
+        authService.signIn(user: user) { [weak self] response in
+            if !response.success {
+                completion(response.message)
+            } else {
+                self?.didSentEventClosure?(.loginSuccessfully)
+            }
+        }
+    }
+}
+
+extension SignInViewModel {
+    enum Event {
+        case loginSuccessfully
+        case showRegister
     }
 }

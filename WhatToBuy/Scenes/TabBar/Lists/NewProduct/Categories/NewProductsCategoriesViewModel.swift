@@ -18,11 +18,9 @@ final class NewProductsCategoriesViewModel: NewProductsCategoriesViewModelProtoc
     let dataProvider: DataProviderProtocol
     var didSentEventClosure: ((NewProductsCategoriesViewModel.Event) -> Void)?
     var productCategories: [ProductCategoryBundle] = []
-    var products: [Product]
     
-    init(dataProvider: DataProviderProtocol, products: [Product]) {
+    init(dataProvider: DataProviderProtocol) {
         self.dataProvider = dataProvider
-        self.products = products
     }
     
     func fetchProductCategories(_ completion: @escaping(() -> Void)) {
@@ -35,12 +33,12 @@ final class NewProductsCategoriesViewModel: NewProductsCategoriesViewModelProtoc
     
     func categorySelected(at indexPath: IndexPath) {
         let selectedCategory = productCategories[indexPath.row]
-        didSentEventClosure?(.selectCategory(selectedCategory, products))
+        didSentEventClosure?(.selectCategory(selectedCategory))
     }
 }
 
 extension NewProductsCategoriesViewModel {
     enum Event {
-        case selectCategory(ProductCategoryBundle, [Product])
+        case selectCategory(ProductCategoryBundle)
     }
 }

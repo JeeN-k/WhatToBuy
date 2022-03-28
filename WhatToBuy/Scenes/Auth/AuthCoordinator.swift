@@ -27,16 +27,30 @@ class AuthCoordinator: AuthCoordinatorProtocol {
     }
     
     func showSignInViewController() {
-        let signInViewModel = SignInViewModel()
+        let authService: AuthenticationServiceProtocol = AuthenticationService()
+        let signInViewModel = SignInViewModel(authService: authService)
         let signInViewController = SignInViewController(viewModel: signInViewModel)
-        signInViewModel.coordinator = self
+        signInViewModel.didSentEventClosure = { [weak self] event in
+            switch event {
+            case .loginSuccessfully:
+                self?.finish()
+            case .showRegister:
+                self?.showSignUpViewController()
+            }
+        }
         navigationController.pushViewController(signInViewController, animated: true)
     }
     
     func showSignUpViewController() {
-        let signUpViewModel = SignUpViewModel()
+        let authService: AuthenticationServiceProtocol = AuthenticationService()
+        let signUpViewModel = SignUpViewModel(authService: authService)
         let signUpViewController = SignUpViewController(viewModel: signUpViewModel)
-        signUpViewModel.coordinator = self
+        signUpViewModel.didSentEventClosure = { [weak self] event in
+            switch event {
+            case .showLogin:
+                self?.showSignInViewController()
+            }
+        }
         navigationController.pushViewController(signUpViewController, animated: true)
     }
     

@@ -23,6 +23,7 @@ protocol DataRequest {
     var method: HTTPMethod { get }
     var headers: [String : String] { get }
     var queryItems: [String : String] { get }
+    var httpBody: Data? { get }
     
     func decode(_ data: Data) throws -> Response
 }
@@ -43,5 +44,9 @@ extension DataRequest {
     
     var queryItems: [String : String] {
         [:]
+    }
+    
+    var httpBody: Data? {
+        return nil
     }
 }
