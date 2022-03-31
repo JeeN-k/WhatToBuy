@@ -11,12 +11,12 @@ final class ProductCellViewModel {
     var name: String
     var price: Float?
     var count: Int?
-    var category: String?
+    var note: String?
     
     init(product: Product) {
         self.name = product.name
         self.price = product.price
         self.count = product.count
-        self.category = product.category
+        self.note = product.note
     }
 }

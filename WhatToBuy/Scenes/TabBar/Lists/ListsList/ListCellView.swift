@@ -39,7 +39,7 @@ class ListCellView: UITableViewCell {
     var viewModel: ListCellViewModel? {
         didSet {
             guard let viewModel = viewModel else { return }
-            iconView.setup(image: viewModel.icon, color: viewModel.color)
+            iconView.setup(image: ListIcon(rawValue: viewModel.icon)?.iconName, color: ListColor(rawValue: viewModel.color)?.hexColor)
             nameLabel.text = viewModel.name
         }
     }

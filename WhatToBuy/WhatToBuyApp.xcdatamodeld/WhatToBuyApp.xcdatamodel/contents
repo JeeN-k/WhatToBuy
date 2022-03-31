@@ -8,15 +8,17 @@
         <relationship name="products" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ProductMO" inverseName="productList" inverseEntity="ProductMO"/>
     </entity>
     <entity name="ProductMO" representedClassName="ProductMO" syncable="YES">
-        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="category" attributeType="String"/>
         <attribute name="count" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="isBought" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
         <attribute name="price" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="productList" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ProductListMO" inverseName="products" inverseEntity="ProductListMO"/>
     </entity>
     <elements>
         <element name="ProductListMO" positionX="-559.1654663085938" positionY="-95.17596435546875" width="128" height="118"/>
-        <element name="ProductMO" positionX="-26.59814453125" positionY="-180.8710632324219" width="128" height="133"/>
+        <element name="ProductMO" positionX="-26.59814453125" positionY="-180.8710632324219" width="128" height="149"/>
     </elements>
 </model>

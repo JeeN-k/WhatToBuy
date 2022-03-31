@@ -8,14 +8,14 @@
 import Foundation
 
 protocol AuthenticationServiceProtocol {
-    func signIn(user: User, completion: @escaping((SignInResponse) -> Void))
-    func signUpNewUser(user: User, completion: @escaping((SignUpResponse) -> Void))
+    func signIn(user: User, completion: @escaping((AuthResponse) -> Void))
+    func signUpNewUser(user: User, completion: @escaping((AuthResponse) -> Void))
 }
 
 class AuthenticationService: AuthenticationServiceProtocol {
-    private let netoworkService = NetworkService.networkService
+    private let netoworkService = NetworkService.instance
     
-    func signIn(user: User, completion: @escaping((SignInResponse) -> Void)) {
+    func signIn(user: User, completion: @escaping((AuthResponse) -> Void)) {
         let signInRequest = SignInRequest(user: user)
         netoworkService.request(signInRequest) { result in
             switch result {
@@ -31,7 +31,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
-    func signUpNewUser(user: User, completion: @escaping((SignUpResponse) -> Void)) {
+    func signUpNewUser(user: User, completion: @escaping((AuthResponse) -> Void)) {
         let signUpRequest = SignUpRequest(user: user)
         netoworkService.request(signUpRequest) { result in
             switch result {

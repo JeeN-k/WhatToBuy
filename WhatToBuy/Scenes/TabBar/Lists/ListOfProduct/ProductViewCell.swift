@@ -16,7 +16,7 @@ final class ProductViewCell: UITableViewCell {
         return label
     }()
     
-    private lazy var categoryLabel: UILabel = {
+    private lazy var noteLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -48,7 +48,7 @@ final class ProductViewCell: UITableViewCell {
         didSet {
             guard let viewModel = viewModel else { return }
             titleLabel.text = viewModel.name
-            categoryLabel.text = viewModel.category
+            noteLabel.text = viewModel.note
             if let count = viewModel.count, count != 0 {
                 countLabel.isHidden = false
                 countLabel.text = "\(count) шт"
@@ -73,13 +73,10 @@ final class ProductViewCell: UITableViewCell {
 extension ProductViewCell {
     
     private func configureView() {
-        let views = [titleLabel, categoryLabel, countLabel, priceLabel]
+        let views = [titleLabel, noteLabel, countLabel, priceLabel]
         contentView.addSubviews(views)
         
         NSLayoutConstraint.activate([
-            categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-            categoryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            
             countLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             countLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
@@ -88,7 +85,10 @@ extension ProductViewCell {
             
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: priceLabel.leadingAnchor, constant: -5)
+            titleLabel.trailingAnchor.constraint(equalTo: priceLabel.leadingAnchor, constant: -5),
+            
+            noteLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            noteLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
         ])
     }
 }

@@ -11,7 +11,7 @@ class ListsCoordinator: Coordinator {
     var finishDelegate: CoordinatorFinishDelegate?
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
-    var type: CoordinatorType { .auth }
+    var type: CoordinatorType { .tab }
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController

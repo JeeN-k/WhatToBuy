@@ -19,8 +19,10 @@ extension ProductMO {
     @NSManaged public var name: String
     @NSManaged public var count: Int32
     @NSManaged public var price: Float
-    @NSManaged public var category: String?
-    @NSManaged public var id: String?
+    @NSManaged public var note: String?
+    @NSManaged public var isBought: Bool
+    @NSManaged public var category: String
+    @NSManaged public var id: String
     @NSManaged public var productList: ProductListMO?
 
 }

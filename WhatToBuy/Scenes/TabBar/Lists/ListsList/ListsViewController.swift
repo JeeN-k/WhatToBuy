@@ -35,11 +35,12 @@ class ListsViewController: UIViewController {
         configureView()
     }
     
+    //TODO: CHANGE THIS TO DELEGATE
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        view.activityStartAnimating(backgroundColor: .systemBackground)
         viewModel.fetchLists { [weak self] in
-            guard let self = self else { return }
-            self.updateData()
+            self?.updateData()
         }
     }
 }
@@ -107,6 +108,7 @@ extension ListsViewController {
     }
     
     private func updateData() {
+        view.activityStopAnimating()
         tableView.reloadData()
     }
     

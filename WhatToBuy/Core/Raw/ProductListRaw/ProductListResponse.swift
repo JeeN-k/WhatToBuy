@@ -8,5 +8,6 @@
 import Foundation
 
 struct ProductListResponse: Codable {
-    var lists: [ProductList]
+    var success: Bool
+    var data: [ProductList]
 }

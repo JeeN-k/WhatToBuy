@@ -19,7 +19,8 @@ enum HTTPMethod: String {
 protocol DataRequest {
     associatedtype Response
     
-    var url: String { get }
+    var baseUrl: String { get }
+    var urlPath: String { get }
     var method: HTTPMethod { get }
     var headers: [String : String] { get }
     var queryItems: [String : String] { get }
@@ -38,6 +39,11 @@ extension DataRequest where Response: Decodable {
 
 // 4
 extension DataRequest {
+    
+    var baseUrl: String {
+        return "https://digitalleagueapp.ru/api"
+    }
+    
     var headers: [String : String] {
         [:]
     }

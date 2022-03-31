@@ -23,10 +23,15 @@ final class IconView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setup(image: String, color: String) {
+    func setup(image: String?, color: String?) {
         addSubview(imageView)
         layer.cornerRadius = 21
-        imageView.image = UIImage(named: image)
-        backgroundColor = color.hexStringToUIColor()
+        if let image = image, let color = color {
+            imageView.image = UIImage(named: image)
+            backgroundColor = color.hexStringToUIColor()
+        } else {
+            imageView.image = UIImage(named: ListIcon.basket.iconName)
+            backgroundColor = ListColor.green.hexColor.hexStringToUIColor()
+        }
     }
 }

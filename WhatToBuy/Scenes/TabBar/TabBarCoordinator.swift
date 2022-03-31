@@ -53,8 +53,10 @@ final class TabBarCoordinator: NSObject, TabBarCoordinatorProtocol {
             childCoordinators.append(listsCoordinator)
             listsCoordinator.start()
         case .trash:
-            let trashVC = UIViewController()
-            navVC.pushViewController(trashVC, animated: true)
+            let trashCoordinator = TrashCoordinator(navVC)
+            trashCoordinator.finishDelegate = self
+            childCoordinators.append(trashCoordinator)
+            trashCoordinator.start()
         case .settings:
             let settingsVC = UIViewController()
             navVC.pushViewController(settingsVC, animated: true)

@@ -17,12 +17,12 @@ protocol NetworkServiceProtocol {
 }
 
 final class NetworkService {
-    static let networkService = NetworkService()
+    static let instance: NetworkServiceProtocol = NetworkService()
 }
 
 extension NetworkService: NetworkServiceProtocol {
     func request<Request: DataRequest>(_ request: Request, completion: @escaping (Result<Request.Response, Error>) -> Void) {
-        guard var urlComponent = URLComponents(string: request.url) else {
+        guard var urlComponent = URLComponents(string: request.baseUrl + request.urlPath) else {
             completion(.failure(RequestErrors.invalidEndPoint))
             return
         }
@@ -31,7 +31,6 @@ extension NetworkService: NetworkServiceProtocol {
         
         request.queryItems.forEach {
             let urlQueryItem = URLQueryItem(name: $0.key, value: $0.value)
-            //            urlComponent.queryItems?.append(urlQueryItem)
             queryitems.append(urlQueryItem)
         }
         

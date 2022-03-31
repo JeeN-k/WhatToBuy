@@ -11,7 +11,7 @@ class NewProductCoordinator: Coordinator {
     var finishDelegate: CoordinatorFinishDelegate?
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
-    var type: CoordinatorType { .auth }
+    var type: CoordinatorType { .tab }
     
     var products: [Product] = []
     var productListID: String! // Force unwrap, но если ID тут нет, то и добавлять некуда

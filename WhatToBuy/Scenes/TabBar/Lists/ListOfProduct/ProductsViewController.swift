@@ -10,7 +10,7 @@ import UIKit
 class ProductsViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero, style: .plain)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
@@ -33,6 +33,17 @@ class ProductsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        view.activityStartAnimating(backgroundColor: .systemBackground)
         viewModel.fetchProducts { [weak self] in
             self?.updateData()
         }
@@ -40,37 +51,54 @@ class ProductsViewController: UIViewController {
 }
 
 
-//MARK: - UITableViewDelegate & UITableViewDataSource
-extension ProductsViewController: UITableViewDelegate, UITableViewDataSource {
+//MARK: - UITableViewDataSource
+extension ProductsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.products.count
+        return viewModel.productSection[section].products.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if viewModel.products.count == 0 {
+        if viewModel.productSection.count == 0 {
             tableView.setEmptyMessage("Список пуст")
-            return 0
         } else {
             tableView.restore()
-            return 1
         }
+        return viewModel.productSection.count
     }
     
-//    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-//        let header = view as! UITableViewHeaderFooterView
-//        header.textLabel?.textColor = .systemPink
-//        header.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-//    }
-//
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return "Fruits"
-//    }
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return viewModel.productSection[section].name
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "productCell",
                                                        for: indexPath) as? ProductViewCell else { return UITableViewCell() }
         cell.viewModel = viewModel.viewModelForCell(at: indexPath)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            viewModel.deleteProduct(at: indexPath)
+            if viewModel.productSection[indexPath.section].products.count == 1 {
+                viewModel.productSection.remove(at: indexPath.section)
+                let indexSet = IndexSet(arrayLiteral: indexPath.section)
+                tableView.deleteSections(indexSet, with: .fade)
+            } else {
+                viewModel.productSection[indexPath.section].products.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        }
+    }
+}
+
+
+//MARK: - UITableViewDelegate
+extension ProductsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.textColor = .systemIndigo
+        header.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -100,11 +128,12 @@ extension ProductsViewController {
     }
     
     private func updateData() {
+        view.activityStopAnimating()
         tableView.reloadData()
     }
     
     @objc
     private func newProductTouched() {
-        viewModel.addProduct()
+        viewModel.openNewProductFlow()
     }
 }

@@ -43,7 +43,10 @@ final class NewProductViewModel: NewProductViewModelProtocol {
         let productName = productCategory.sections[indexPath.section].items[indexPath.row]
         let isContains = products.value.contains(where: { $0.name == productName })
         if !isContains {
-            let product = Product(name: productName, category: productCategory.name)
+            let product = Product(name: productName,
+                                  category: productCategory.name,
+                                  isBought: false,
+                                  _id: UUID().uuidString)
             saveNewProduct(product: product, listId: productListId)
         }
     }

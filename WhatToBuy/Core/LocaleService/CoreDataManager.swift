@@ -66,8 +66,8 @@ extension CoreDataManager: CoreDataManagerProtocol {
         let productMO = ProductMO(context: moc)
         productMO.setValue(product.name, forKey: "name")
         productMO.setValue(product.count, forKey: "count")
+        productMO.setValue(product.note, forKey: "note")
         productMO.setValue(product.category, forKey: "category")
-        productMO.setValue(product.price, forKey: "price")
         productMO.productList = productList
         productList.addToProducts(productMO)
         

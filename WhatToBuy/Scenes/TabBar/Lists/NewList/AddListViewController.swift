@@ -57,9 +57,9 @@ extension AddListViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if component == 0 {
-            return Colors.allCases.count
+            return ListColor.allCases.count
         } else {
-            return Icons.allCases.count
+            return ListIcon.allCases.count
         }
     }
     
@@ -71,11 +71,11 @@ extension AddListViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 42, height: 42))
         view.layer.cornerRadius = 21
         if component == 0 {
-            view.backgroundColor = Colors.allCases[row].getColorHex().hexStringToUIColor()
+            view.backgroundColor = ListColor.allCases[row].hexColor.hexStringToUIColor()
             return view
         } else {
             view.backgroundColor = "#E5E5E5".hexStringToUIColor()
-            let imageView = UIImageView(image: UIImage(named: Icons.allCases[row].rawValue))
+            let imageView = UIImageView(image: UIImage(named: ListIcon.allCases[row].iconName))
             imageView.frame = CGRect(x: 5, y: 5, width: 32, height: 32)
             view.addSubview(imageView)
             return view
@@ -84,9 +84,9 @@ extension AddListViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if component == 1 {
-            viewModel.pickerSelection.icon = Icons.allCases[row].rawValue
+            viewModel.pickerSelection.icon = ListIcon.allCases[row].rawValue
         } else {
-            viewModel.pickerSelection.color = Colors.allCases[row].getColorHex()
+            viewModel.pickerSelection.color = ListColor.allCases[row].rawValue
         }
     }
 }

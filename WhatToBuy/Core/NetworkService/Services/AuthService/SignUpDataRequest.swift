@@ -24,15 +24,13 @@ struct SignUpRequest: DataRequest {
         ["app-token": apiKey]
     }
     
-    var url: String {
-        let baseURL = "https://digitalleagueapp.ru/api"
-        let path = "/auth/signUp"
-        return baseURL + path
+    var urlPath: String {
+        return "/auth/signUp"
     }
     
     var method: HTTPMethod = .post
     
-    typealias Response = SignUpResponse
+    typealias Response = AuthResponse
     
     
 }
