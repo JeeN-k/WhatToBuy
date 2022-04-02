@@ -102,6 +102,7 @@ extension ProductsViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.openEditProductFlow(at: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
@@ -113,10 +114,22 @@ extension ProductsViewController {
         title = viewModel.titleForView()
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Добавить продукт",
-                                                            style: .done, target: self,
-                                                            action: #selector(newProductTouched))
+        let addButton = UIBarButtonItem(image: UIImage(systemName: "plus"),
+                                        style: .plain,
+                                        target: self,
+                                        action: #selector(newProductTouched))
         
+        let editButton = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(editListTouched))
+        
+        let invitesButton = UIBarButtonItem(image: UIImage(systemName: "person.badge.plus"),
+                                            style: .plain,
+                                            target: self,
+                                            action: #selector(inviteUserTouched))
+        
+        navigationItem.rightBarButtonItems = [addButton, editButton, invitesButton]
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
@@ -135,5 +148,39 @@ extension ProductsViewController {
     @objc
     private func newProductTouched() {
         viewModel.openNewProductFlow()
+    }
+    
+    @objc
+    private func editListTouched() {
+        viewModel.editProductsList()
+    }
+    
+    @objc
+    private func inviteUserTouched() {
+        showInviteAlert()
+    }
+    
+    private func inviteUserToList(email: String?) {
+        guard let email = email, email != "" else { return }
+        viewModel.inviteUser(email: email)
+    }
+ 
+    private func showInviteAlert() {
+        let ac = UIAlertController(title: "Пригласите друга для совместного редактирования",
+                                   message: "Ввведите email пользователя которого хотите пригласить",
+                                   preferredStyle: .alert)
+        ac.addTextField { textfield in
+            textfield.keyboardType = .emailAddress
+            textfield.placeholder = "Email"
+        }
+        
+        let acCancel = UIAlertAction(title: "Отмена", style: .cancel)
+        let acDone = UIAlertAction(title: "Пригласить", style: .default, handler: { [weak self] _ in
+            let email = ac.textFields![0].text
+            self?.inviteUserToList(email: email)
+        })
+        ac.addAction(acCancel)
+        ac.addAction(acDone)
+        present(ac, animated: true)
     }
 }

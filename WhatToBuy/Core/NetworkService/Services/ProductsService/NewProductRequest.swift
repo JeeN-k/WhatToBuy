@@ -35,10 +35,3 @@ struct NewProductRequest: DataRequest {
         ["auth-token": authToken]
     }
 }
-
-extension NewProductRequest {
-    struct ProductRequest: Encodable {
-        var name: String
-        var category: String
-    }
-}

@@ -10,10 +10,10 @@ import Foundation
 struct NewListRequest: DataRequest {
     private let authToken = TokenManager.token ?? ""
     var method: HTTPMethod = .post
-    var productList: ProductListRequest
+    var productList: ProductListRequestBody
     
     init(productList: ProductList) {
-        self.productList = ProductListRequest(name: productList.name, color: productList.color, icon: productList.icon)
+        self.productList = ProductListRequestBody(name: productList.name, color: productList.color, icon: productList.icon)
     }
     
     typealias Response = NewListResponse
@@ -30,12 +30,4 @@ struct NewListRequest: DataRequest {
     }
     
 
-}
-
-extension NewListRequest {
-    struct ProductListRequest: Encodable {
-        var name: String
-        var color: String
-        var icon: String
-    }
 }

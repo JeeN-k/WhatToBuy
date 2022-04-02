@@ -7,8 +7,17 @@
 
 import Foundation
 
-final class AddListViewModel {
-    let dataProvider: DataProviderProtocol
+protocol EditableList {
+    var pickerSelection: PickerSelection { get set }
+}
+
+protocol AddListViewModelProtocol: EditableList {
+    func createNewList(name: String?)
+    func cancelAdding()
+}
+
+final class AddListViewModel: AddListViewModelProtocol {
+    private let dataProvider: DataProviderProtocol
     var pickerSelection: PickerSelection = PickerSelection(icon: ListIcon.allCases[0].rawValue,
                                                            color: ListColor.allCases[0].rawValue)
     var didSentEventClosure: ((AddListViewModel.Event) -> Void)?

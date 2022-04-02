@@ -19,6 +19,9 @@ protocol ProductsViewModelProtocol {
     func openNewProductFlow()
     func viewModelForCell(at indexPath: IndexPath) -> ProductCellViewModel
     func deleteProduct(at indexPath: IndexPath)
+    func editProductsList()
+    func openEditProductFlow(at indexPath: IndexPath)
+    func inviteUser(email: String)
 }
 
 final class ProductsViewModel: ProductsViewModelProtocol {
@@ -66,10 +69,25 @@ final class ProductsViewModel: ProductsViewModelProtocol {
         let product = productSection[indexPath.section].products[indexPath.row]
         return ProductCellViewModel(product: product)
     }
+    
+    func editProductsList() {
+        didSentEventClosure?(.editList)
+    }
+    
+    func openEditProductFlow(at indexPath: IndexPath) {
+        let product = productSection[indexPath.section].products[indexPath.row]
+        didSentEventClosure?(.editProduct(product))
+    }
+    
+    func inviteUser(email: String) {
+        dataProvider.inviteUserToList(email: email, listId: productList._id)
+    }
 }
 
 extension ProductsViewModel {
     enum Event {
         case addProduct([Product], String)
+        case editList
+        case editProduct(Product)
     }
 }

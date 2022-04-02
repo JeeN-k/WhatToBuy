@@ -16,13 +16,19 @@ protocol DataProviderProtocol {
     func addProductToList(product: Product, productListID: String)
     func deleteProduct(productId: String)
     func fetchRemovedProductLists(completion: @escaping(([ProductList]?) -> Void))
+    func updateProductList(productList: ProductList, productListID: String)
+    func updateProduct(product: Product)
+    func inviteUserToList(email: String, listId: String)
 }
 
 class DataProvider: DataProviderProtocol {
     private let bundleLoader = BundleContentLoader()
     private let coreDataManager = CoreDataManager.instance
-    private let networkServie = NetworkService.instance
-    var isOfflineMode = false
+    private let networkService = NetworkService.instance
+    
+    var isOfflineMode:Bool {
+        !TokenManager.tokenExists
+    }
     
     func fetchLists(completion: @escaping (([ProductList]?) -> Void)) {
         if isOfflineMode {
@@ -31,7 +37,7 @@ class DataProvider: DataProviderProtocol {
             }
         } else {
             let fetchListsRequest = FetchListsRequest()
-            networkServie.request(fetchListsRequest) { result in
+            networkService.request(fetchListsRequest) { result in
                 switch result {
                 case .success(let lists):
                     completion(lists.data)
@@ -44,10 +50,10 @@ class DataProvider: DataProviderProtocol {
     
     func deleteProduct(productId: String) {
         if isOfflineMode {
-            
+            print("Can't do this with offline mode yet")
         } else {
             let deleteProductRequest = DeleteProductRequest(productId: productId)
-            networkServie.request(deleteProductRequest) { result in
+            networkService.request(deleteProductRequest) { result in
                 switch result {
                 case .success(let response):
                     print(response.message)
@@ -63,7 +69,7 @@ class DataProvider: DataProviderProtocol {
             coreDataManager.saveProductList(productList: productList)
         } else {
             let newListRequest = NewListRequest(productList: productList)
-            networkServie.request(newListRequest) { result in
+            networkService.request(newListRequest) { result in
                 switch result {
                 case .success(let response):
                     print(response.success)
@@ -90,7 +96,7 @@ class DataProvider: DataProviderProtocol {
             }
         } else {
             let fetchProductsRequest = FetchProductsRequest(listId: productListID)
-            networkServie.request(fetchProductsRequest) { result in
+            networkService.request(fetchProductsRequest) { result in
                 switch result {
                 case .success(let response):
                     completion(response.products)
@@ -106,7 +112,7 @@ class DataProvider: DataProviderProtocol {
             coreDataManager.deleteProductList(id: productListID)
         } else {
             let removeToTrashRequest = RemoveToTrashRequest(listId: productListID)
-            networkServie.request(removeToTrashRequest) { result in
+            networkService.request(removeToTrashRequest) { result in
                 switch result {
                 case .success(let response):
                     print(response.message)
@@ -122,7 +128,7 @@ class DataProvider: DataProviderProtocol {
             coreDataManager.addProductToProductList(id: productListID, product: product)
         } else {
             let newProductRequest = NewProductRequest(listId: productListID, product: product)
-            networkServie.request(newProductRequest) { result in
+            networkService.request(newProductRequest) { result in
                 switch result {
                 case .success(let response):
                     print(response.success)
@@ -135,13 +141,61 @@ class DataProvider: DataProviderProtocol {
     
     func fetchRemovedProductLists(completion: @escaping(([ProductList]?) -> Void)) {
         if isOfflineMode {
-            
+            print("Can't do this with offline mode yet")
         } else {
             let removedProductListsRequest = FetchRemovedListsRequest()
-            networkServie.request(removedProductListsRequest) { result in
+            networkService.request(removedProductListsRequest) { result in
                 switch result {
                 case .success(let response):
                     completion(response.data)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    func updateProductList(productList: ProductList, productListID: String) {
+        if isOfflineMode {
+            print("Can't do this with offline mode yet")
+        } else {
+            let updateProductListRequest = UpdateProductListRequest(productList: productList, productListID: productListID)
+            networkService.request(updateProductListRequest) { result in
+                switch result {
+                case .success(let response):
+                    print(response.message)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    func updateProduct(product: Product) {
+        if isOfflineMode {
+            print("Can't do this with offline mode yet")
+        } else {
+            let updateProductRequest = UpdateProductRequest(product: product)
+            networkService.request(updateProductRequest) { result in
+                switch result {
+                case .success(let response):
+                    print(response.message)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    func inviteUserToList(email: String, listId: String) {
+        if isOfflineMode {
+            print("Can't do this with offline mode yet")
+        } else {
+            let inviteRequest = InviteToListRequest(listId: listId, email: email)
+            networkService.request(inviteRequest) { result in
+                switch result {
+                case .success(let response):
+                    print(response.message)
                 case .failure(let error):
                     print(error)
                 }

@@ -76,6 +76,22 @@
 		1F672D6C27F6035B00E4D6A6 /* TrashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672D6B27F6035B00E4D6A6 /* TrashViewController.swift */; };
 		1F672D6E27F603E500E4D6A6 /* TrashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672D6D27F603E500E4D6A6 /* TrashViewModel.swift */; };
 		1F672D7227F606DE00E4D6A6 /* FetchRemovedListsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672D7127F606DE00E4D6A6 /* FetchRemovedListsRequest.swift */; };
+		1F672D9727F70BAF00E4D6A6 /* EditListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672D9627F70BAF00E4D6A6 /* EditListView.swift */; };
+		1F672D9927F70C4F00E4D6A6 /* EditListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672D9827F70C4F00E4D6A6 /* EditListViewController.swift */; };
+		1F672D9B27F70C9200E4D6A6 /* EditListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672D9A27F70C9200E4D6A6 /* EditListViewModel.swift */; };
+		1F672D9D27F71B9000E4D6A6 /* UpdateProductListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672D9C27F71B9000E4D6A6 /* UpdateProductListRequest.swift */; };
+		1F672DA027F71CBA00E4D6A6 /* ProductListRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672D9F27F71CBA00E4D6A6 /* ProductListRequestBody.swift */; };
+		1F672DA427F7257B00E4D6A6 /* EditProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672DA327F7257B00E4D6A6 /* EditProductViewController.swift */; };
+		1F672DA627F746B300E4D6A6 /* CaseIterable+FindIndidexByValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672DA527F746B300E4D6A6 /* CaseIterable+FindIndidexByValue.swift */; };
+		1F672DA827F7498600E4D6A6 /* EditProductHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672DA727F7498600E4D6A6 /* EditProductHeaderCell.swift */; };
+		1F672DAA27F74B5B00E4D6A6 /* EditProductFieldsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672DA927F74B5B00E4D6A6 /* EditProductFieldsCell.swift */; };
+		1F672DAC27F77A5C00E4D6A6 /* EditProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672DAB27F77A5B00E4D6A6 /* EditProductViewModel.swift */; };
+		1F672DAE27F77F0100E4D6A6 /* EditProductCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672DAD27F77F0100E4D6A6 /* EditProductCellViewModel.swift */; };
+		1F672DB027F7920A00E4D6A6 /* ProductRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672DAF27F7920A00E4D6A6 /* ProductRequestBody.swift */; };
+		1F672DB227F7923D00E4D6A6 /* UpdateProductRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672DB127F7923D00E4D6A6 /* UpdateProductRequest.swift */; };
+		1F672DB427F793EC00E4D6A6 /* ProductRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672DB327F793EC00E4D6A6 /* ProductRequest.swift */; };
+		1F672DB827F7B16F00E4D6A6 /* InvitesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672DB727F7B16F00E4D6A6 /* InvitesViewController.swift */; };
+		1F672DBA27F890B900E4D6A6 /* InviteToListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672DB927F890B900E4D6A6 /* InviteToListRequest.swift */; };
 		1FD8C82927E8E10F005676CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD8C82827E8E10F005676CA /* AppDelegate.swift */; };
 		1FD8C82B27E8E10F005676CA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD8C82A27E8E10F005676CA /* SceneDelegate.swift */; };
 		1FD8C82D27E8E10F005676CA /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD8C82C27E8E10F005676CA /* WelcomeViewController.swift */; };
@@ -160,6 +176,22 @@
 		1F672D6B27F6035B00E4D6A6 /* TrashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashViewController.swift; sourceTree = "<group>"; };
 		1F672D6D27F603E500E4D6A6 /* TrashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashViewModel.swift; sourceTree = "<group>"; };
 		1F672D7127F606DE00E4D6A6 /* FetchRemovedListsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRemovedListsRequest.swift; sourceTree = "<group>"; };
+		1F672D9627F70BAF00E4D6A6 /* EditListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditListView.swift; sourceTree = "<group>"; };
+		1F672D9827F70C4F00E4D6A6 /* EditListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditListViewController.swift; sourceTree = "<group>"; };
+		1F672D9A27F70C9200E4D6A6 /* EditListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditListViewModel.swift; sourceTree = "<group>"; };
+		1F672D9C27F71B9000E4D6A6 /* UpdateProductListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateProductListRequest.swift; sourceTree = "<group>"; };
+		1F672D9F27F71CBA00E4D6A6 /* ProductListRequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListRequestBody.swift; sourceTree = "<group>"; };
+		1F672DA327F7257B00E4D6A6 /* EditProductViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProductViewController.swift; sourceTree = "<group>"; };
+		1F672DA527F746B300E4D6A6 /* CaseIterable+FindIndidexByValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseIterable+FindIndidexByValue.swift"; sourceTree = "<group>"; };
+		1F672DA727F7498600E4D6A6 /* EditProductHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProductHeaderCell.swift; sourceTree = "<group>"; };
+		1F672DA927F74B5B00E4D6A6 /* EditProductFieldsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProductFieldsCell.swift; sourceTree = "<group>"; };
+		1F672DAB27F77A5B00E4D6A6 /* EditProductViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProductViewModel.swift; sourceTree = "<group>"; };
+		1F672DAD27F77F0100E4D6A6 /* EditProductCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProductCellViewModel.swift; sourceTree = "<group>"; };
+		1F672DAF27F7920A00E4D6A6 /* ProductRequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductRequestBody.swift; sourceTree = "<group>"; };
+		1F672DB127F7923D00E4D6A6 /* UpdateProductRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateProductRequest.swift; sourceTree = "<group>"; };
+		1F672DB327F793EC00E4D6A6 /* ProductRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductRequest.swift; sourceTree = "<group>"; };
+		1F672DB727F7B16F00E4D6A6 /* InvitesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitesViewController.swift; sourceTree = "<group>"; };
+		1F672DB927F890B900E4D6A6 /* InviteToListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteToListRequest.swift; sourceTree = "<group>"; };
 		1FD8C82527E8E10F005676CA /* WhatToBuy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatToBuy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FD8C82827E8E10F005676CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FD8C82A27E8E10F005676CA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -204,6 +236,7 @@
 				1F672D3E27F0E2B000E4D6A6 /* UIViewController+HidingKeyboard.swift */,
 				1F672D4627F21F2400E4D6A6 /* UIViewController+Alert.swift */,
 				1F672D6727F4DE6600E4D6A6 /* UIView+Spinner.swift */,
+				1F672DA527F746B300E4D6A6 /* CaseIterable+FindIndidexByValue.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -231,6 +264,7 @@
 		1F672CBE27EE1B3D00E4D6A6 /* NetworkService */ = {
 			isa = PBXGroup;
 			children = (
+				1F672D9E27F71CA400E4D6A6 /* RequestsBody */,
 				1F672CF327EF569900E4D6A6 /* Services */,
 				1F672CF227EF568D00E4D6A6 /* NetworkCore */,
 			);
@@ -353,11 +387,15 @@
 		1F672CF727EF773A00E4D6A6 /* Lists */ = {
 			isa = PBXGroup;
 			children = (
+				1F672DBB27F8974C00E4D6A6 /* InvitesList */,
+				1F672DA127F7236800E4D6A6 /* UpdateProduct */,
 				1F672D2E27F0777A00E4D6A6 /* NewProduct */,
 				1F672D2D27F0775700E4D6A6 /* ListOfProduct */,
 				1F672CFF27EF7AA200E4D6A6 /* NewList */,
+				1F672D9527F70AE300E4D6A6 /* UpdateList */,
 				1F672CFE27EF7A8900E4D6A6 /* ListsList */,
 				1F672CFA27EF777100E4D6A6 /* ListsCoordinator.swift */,
+				1F672D9627F70BAF00E4D6A6 /* EditListView.swift */,
 			);
 			path = Lists;
 			sourceTree = "<group>";
@@ -519,6 +557,8 @@
 				1F672D5627F4B93800E4D6A6 /* NewListRequest.swift */,
 				1F672D6527F4D98F00E4D6A6 /* RemoveToTrashRequest.swift */,
 				1F672D7127F606DE00E4D6A6 /* FetchRemovedListsRequest.swift */,
+				1F672D9C27F71B9000E4D6A6 /* UpdateProductListRequest.swift */,
+				1F672DB927F890B900E4D6A6 /* InviteToListRequest.swift */,
 			);
 			path = ListsService;
 			sourceTree = "<group>";
@@ -529,8 +569,56 @@
 				1F672D5B27F4C0DB00E4D6A6 /* FetchProductsRequest.swift */,
 				1F672D5D27F4C2A200E4D6A6 /* NewProductRequest.swift */,
 				1F672D6127F4CDC300E4D6A6 /* DeleteProductRequest.swift */,
+				1F672DB127F7923D00E4D6A6 /* UpdateProductRequest.swift */,
 			);
 			path = ProductsService;
+			sourceTree = "<group>";
+		};
+		1F672D9527F70AE300E4D6A6 /* UpdateList */ = {
+			isa = PBXGroup;
+			children = (
+				1F672D9827F70C4F00E4D6A6 /* EditListViewController.swift */,
+				1F672D9A27F70C9200E4D6A6 /* EditListViewModel.swift */,
+			);
+			path = UpdateList;
+			sourceTree = "<group>";
+		};
+		1F672D9E27F71CA400E4D6A6 /* RequestsBody */ = {
+			isa = PBXGroup;
+			children = (
+				1F672D9F27F71CBA00E4D6A6 /* ProductListRequestBody.swift */,
+				1F672DAF27F7920A00E4D6A6 /* ProductRequestBody.swift */,
+				1F672DB327F793EC00E4D6A6 /* ProductRequest.swift */,
+			);
+			path = RequestsBody;
+			sourceTree = "<group>";
+		};
+		1F672DA127F7236800E4D6A6 /* UpdateProduct */ = {
+			isa = PBXGroup;
+			children = (
+				1F672DB527F7947800E4D6A6 /* Cell */,
+				1F672DA327F7257B00E4D6A6 /* EditProductViewController.swift */,
+				1F672DAB27F77A5B00E4D6A6 /* EditProductViewModel.swift */,
+			);
+			path = UpdateProduct;
+			sourceTree = "<group>";
+		};
+		1F672DB527F7947800E4D6A6 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				1F672DA727F7498600E4D6A6 /* EditProductHeaderCell.swift */,
+				1F672DAD27F77F0100E4D6A6 /* EditProductCellViewModel.swift */,
+				1F672DA927F74B5B00E4D6A6 /* EditProductFieldsCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		1F672DBB27F8974C00E4D6A6 /* InvitesList */ = {
+			isa = PBXGroup;
+			children = (
+				1F672DB727F7B16F00E4D6A6 /* InvitesViewController.swift */,
+			);
+			path = InvitesList;
 			sourceTree = "<group>";
 		};
 		1FD8C81C27E8E10F005676CA = {
@@ -644,6 +732,7 @@
 			files = (
 				1F672D5927F4B97800E4D6A6 /* NewListResponse.swift in Sources */,
 				1FD8C82D27E8E10F005676CA /* WelcomeViewController.swift in Sources */,
+				1F672DAA27F74B5B00E4D6A6 /* EditProductFieldsCell.swift in Sources */,
 				1F672D0227EF7AB600E4D6A6 /* AddListViewModel.swift in Sources */,
 				1F672D0B27EF986A00E4D6A6 /* WhatToBuyApp.xcdatamodeld in Sources */,
 				1FD8C82927E8E10F005676CA /* AppDelegate.swift in Sources */,
@@ -657,17 +746,23 @@
 				1F672D5E27F4C2A200E4D6A6 /* NewProductRequest.swift in Sources */,
 				1F672CB127EB91EC00E4D6A6 /* ListCellView.swift in Sources */,
 				1F672CAD27EB7C0900E4D6A6 /* AddListViewController.swift in Sources */,
+				1F672DBA27F890B900E4D6A6 /* InviteToListRequest.swift in Sources */,
 				1F672D2627EFB58C00E4D6A6 /* ProductListMO+CoreDataClass.swift in Sources */,
+				1F672D9727F70BAF00E4D6A6 /* EditListView.swift in Sources */,
+				1F672DB427F793EC00E4D6A6 /* ProductRequest.swift in Sources */,
+				1F672DB827F7B16F00E4D6A6 /* InvitesViewController.swift in Sources */,
 				1F672CD627EE3BB700E4D6A6 /* Coordinator.swift in Sources */,
 				1F672CFD27EF77E700E4D6A6 /* ListsViewModel.swift in Sources */,
 				1F672CC227EE1B5F00E4D6A6 /* DataProvider.swift in Sources */,
 				1F672D1827EFA1F000E4D6A6 /* PickerSelection.swift in Sources */,
+				1F672DB027F7920A00E4D6A6 /* ProductRequestBody.swift in Sources */,
 				1F672D3827F0C8F200E4D6A6 /* NewProductCellView.swift in Sources */,
 				1F672D6027F4C74300E4D6A6 /* NewProductResponse.swift in Sources */,
 				1F672D5527F4AECC00E4D6A6 /* FetchListsRequest.swift in Sources */,
 				1F672D2A27EFB9AE00E4D6A6 /* ProductResponse.swift in Sources */,
 				1F672D1227EF9AC500E4D6A6 /* CoreDataManager.swift in Sources */,
 				1F672D5727F4B93800E4D6A6 /* NewListRequest.swift in Sources */,
+				1F672DA827F7498600E4D6A6 /* EditProductHeaderCell.swift in Sources */,
 				1F672CE927EF346A00E4D6A6 /* SignInViewModel.swift in Sources */,
 				1F672CD827EE3C1C00E4D6A6 /* MainCoordinator.swift in Sources */,
 				1F672CB827EE15B800E4D6A6 /* NewProductsCategoriesViewController.swift in Sources */,
@@ -675,12 +770,17 @@
 				1F672D6427F4CEB800E4D6A6 /* BasicResponse.swift in Sources */,
 				1F672CAF27EB863900E4D6A6 /* String+HexToColor.swift in Sources */,
 				1F672CED27EF49F600E4D6A6 /* ProductListResponse.swift in Sources */,
+				1F672DA427F7257B00E4D6A6 /* EditProductViewController.swift in Sources */,
 				1F672D6A27F6031D00E4D6A6 /* TrashCoordinator.swift in Sources */,
 				1F672D4427F2051700E4D6A6 /* SignUpDataRequest.swift in Sources */,
 				1FD8C84327E8F325005676CA /* UITextField+Paddings.swift in Sources */,
 				1F672D4B27F2240D00E4D6A6 /* AuthResponse.swift in Sources */,
+				1F672DB227F7923D00E4D6A6 /* UpdateProductRequest.swift in Sources */,
 				1F672D0E27EF992700E4D6A6 /* ListIcon.swift in Sources */,
+				1F672DAC27F77A5C00E4D6A6 /* EditProductViewModel.swift in Sources */,
+				1F672DA027F71CBA00E4D6A6 /* ProductListRequestBody.swift in Sources */,
 				1F672CFB27EF777100E4D6A6 /* ListsCoordinator.swift in Sources */,
+				1F672D9927F70C4F00E4D6A6 /* EditListViewController.swift in Sources */,
 				1F672D0827EF8E6500E4D6A6 /* User.swift in Sources */,
 				1F672D2727EFB58C00E4D6A6 /* ProductListMO+CoreDataProperties.swift in Sources */,
 				1FD8C84127E8F22D005676CA /* SignInViewController.swift in Sources */,
@@ -697,13 +797,16 @@
 				1FD8C83D27E8E7B6005676CA /* UIView+AddSubviews.swift in Sources */,
 				1F672CEF27EF4BDB00E4D6A6 /* DataRequest.swift in Sources */,
 				1F672D4727F21F2400E4D6A6 /* UIViewController+Alert.swift in Sources */,
+				1F672D9D27F71B9000E4D6A6 /* UpdateProductListRequest.swift in Sources */,
 				1F672CC927EE287100E4D6A6 /* ProductViewCell.swift in Sources */,
+				1F672DA627F746B300E4D6A6 /* CaseIterable+FindIndidexByValue.swift in Sources */,
 				1F672CB627ECCD6600E4D6A6 /* IconView.swift in Sources */,
 				1F672D4E27F22E0B00E4D6A6 /* NewProductCoordinator.swift in Sources */,
 				1F672D1627EF9EB600E4D6A6 /* ProductList.swift in Sources */,
 				1F672D5027F231BB00E4D6A6 /* Observable.swift in Sources */,
 				1F672D0427EF8D7400E4D6A6 /* AuthenticationService.swift in Sources */,
 				1F672D3627F0940500E4D6A6 /* NewProductsCategoriesViewModel.swift in Sources */,
+				1F672D9B27F70C9200E4D6A6 /* EditListViewModel.swift in Sources */,
 				1FD8C82B27E8E10F005676CA /* SceneDelegate.swift in Sources */,
 				1F672D3027F077AA00E4D6A6 /* ProductsViewModel.swift in Sources */,
 				1F672D1A27EFA72700E4D6A6 /* ListCellViewModel.swift in Sources */,
@@ -716,6 +819,7 @@
 				1FD8C84727E8F564005676CA /* ListsViewController.swift in Sources */,
 				1F672CF127EF4C2F00E4D6A6 /* NetworkService.swift in Sources */,
 				1F672D3227F08DFF00E4D6A6 /* NewProductViewModel.swift in Sources */,
+				1F672DAE27F77F0100E4D6A6 /* EditProductCellViewModel.swift in Sources */,
 				1F672CDC27EE504800E4D6A6 /* AuthCoordinator.swift in Sources */,
 				1F672CC427EE1BDA00E4D6A6 /* BundleContentLoader.swift in Sources */,
 				1F672D5227F23EA900E4D6A6 /* ProductCellViewModel.swift in Sources */,

@@ -21,6 +21,36 @@ class ListsCoordinator: Coordinator {
         showListsViewController()
     }
     
+    private func showEditListViewController(productList: ProductList) {
+        let dataProvider = DataProvider()
+        let editListViewModel = EditListViewModel(dataProvider: dataProvider, productList: productList)
+        let editListViewController = EditListViewConrtoller(viewModel: editListViewModel)
+        editListViewModel.didSentEventClosure = { [weak self] event in
+            switch event {
+            case .cancelEdit:
+                self?.navigationController.popViewController(animated: true)
+            case .updateList:
+                self?.navigationController.popViewController(animated: true)
+            }
+        }
+        navigationController.pushViewController(editListViewController, animated: true)
+    }
+    
+    private func showEditProductViewController(product: Product) {
+        let dataProvider = DataProvider()
+        let editProductViewModel = EditProductViewModel(dataProvider: dataProvider, product: product)
+        let editProductViewController = EditProductViewContrtoller(viewModel: editProductViewModel)
+        editProductViewModel.didSentEventClosure = { [weak self] event in
+            switch event {
+            case .cancel:
+                self?.navigationController.popViewController(animated: true)
+            case .updateProduct:
+                self?.navigationController.popViewController(animated: true)
+            }
+        }
+        navigationController.pushViewController(editProductViewController, animated: true)
+    }
+    
     private func showListsViewController() {
         let dataProvider: DataProviderProtocol = DataProvider()
         let listsViewModel = ListsViewModel(dataProvider: dataProvider)
@@ -44,6 +74,10 @@ class ListsCoordinator: Coordinator {
             switch event {
             case .addProduct(let products, let productListId):
                 self?.showNewProductFlow(currentProducts: products, productListId: productListId)
+            case .editList:
+                self?.showEditListViewController(productList: productList)
+            case .editProduct(let product):
+                self?.showEditProductViewController(product: product)
             }
         }
         navigationController.pushViewController(productsViewController, animated: true)
@@ -61,7 +95,6 @@ class ListsCoordinator: Coordinator {
                 self?.navigationController.popViewController(animated: true)
             }
         }
-        newListViewController.viewModel = newListViewModel
         navigationController.pushViewController(newListViewController, animated: true)
     }
     

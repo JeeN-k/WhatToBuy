@@ -92,10 +92,12 @@ extension ListsViewController {
         title = "Списки"
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Добавить",
-                                                            style: .done,
-                                                            target: self,
-                                                            action: #selector(newListTouched))
+        let addButton = UIBarButtonItem(image: UIImage(systemName: "plus"),
+                                        style: .plain, target: self, action: #selector(newListTouched))
+        
+        let invitesList = UIBarButtonItem(image: UIImage(systemName: "person.wave.2"),
+                                          style: .plain, target: self, action: nil)
+        navigationItem.rightBarButtonItems = [addButton, invitesList]
         
         view.addSubview(tableView)
         
@@ -112,7 +114,8 @@ extension ListsViewController {
         tableView.reloadData()
     }
     
-    @objc private func newListTouched() {
+    @objc
+    private func newListTouched() {
         viewModel.addNewList()
     }
 }
