@@ -19,8 +19,9 @@ final class EditProductViewModel {
     }
     
     func updateProduct() {
-        dataProvider.updateProduct(product: product)
-        didSentEventClosure?(.updateProduct)
+        dataProvider.updateProduct(product: product) { [weak self] in
+            self?.didSentEventClosure?(.updateProduct)
+        }
     }
     
     func cancelUpdate() {
@@ -29,6 +30,26 @@ final class EditProductViewModel {
     
     func viewModelForCell() -> EditProductCellViewModel {
         return EditProductCellViewModel(product: product)
+    }
+}
+
+extension EditProductViewModel: ProductPropertiesDelegate {
+    func propertyEdited(with value: String?, type: EditProductCellType) {
+        switch type {
+        case .count:
+            product.count = Int(value ?? "0")
+        case .price:
+            product.price = Float(value ?? "0")
+        case .note:
+            product.note = value
+        }
+    }
+}
+
+extension EditProductViewModel: HeaderEditedDelegate {
+    func productNameEdited(name: String?) {
+        guard let name = name else { return }
+        product.name = name
     }
 }
 

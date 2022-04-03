@@ -18,20 +18,7 @@ class NewProductViewController: UIViewController {
         tableView.register(NewProductCellView.self, forCellReuseIdentifier: "newProductCell")
         return tableView
     }()
-    
-    private lazy var searchController: UISearchController = {
-        let searchBar = UISearchController(searchResultsController: nil)
-        searchBar.searchResultsUpdater = self
-        searchBar.obscuresBackgroundDuringPresentation = false
-        searchBar.searchBar.placeholder = "Продукт"
-        return searchBar
-    }()
-    
-    var isSearchBarEmpty: Bool {
-        return searchController.searchBar.text?.isEmpty ?? true
-    }
-    
-    let viewModel: NewProductViewModelProtocol
+    var viewModel: NewProductViewModelProtocol
     
     init(viewModel: NewProductViewModelProtocol) {
         self.viewModel = viewModel
@@ -54,15 +41,11 @@ class NewProductViewController: UIViewController {
 //MARK: - UITableViewDelegate & UITableViewDataSource
 extension NewProductViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.productCategory.sections[section].items.count
+        return viewModel.productCategory.items.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.productCategory.sections.count
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return viewModel.productCategory.sections[section].name
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -78,12 +61,6 @@ extension NewProductViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-extension NewProductViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        
-    }
-}
-
 
 // MARK: - Private Methods
 extension NewProductViewController {
@@ -91,8 +68,6 @@ extension NewProductViewController {
         title = viewModel.titleForView()
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.searchController = searchController
-        definesPresentationContext = true
         
         view.addSubview(tableView)
         

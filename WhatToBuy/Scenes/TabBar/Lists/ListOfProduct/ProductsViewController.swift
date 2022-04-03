@@ -19,6 +19,14 @@ class ProductsViewController: UIViewController {
         return tableView
     }()
     
+    private lazy var refreshControl: UIRefreshControl = {
+        let refresher = UIRefreshControl()
+        refresher.attributedTitle = NSAttributedString(string: "Обновление")
+        refresher.addTarget(self, action: #selector(refreshProducts), for: .valueChanged)
+        refresher.tintColor = .systemIndigo
+        return refresher
+    }()
+    
     var viewModel: ProductsViewModelProtocol
     
     init(viewModel: ProductsViewModelProtocol) {
@@ -33,20 +41,12 @@ class ProductsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         view.activityStartAnimating(backgroundColor: .systemBackground)
-        viewModel.fetchProducts { [weak self] in
-            self?.updateData()
-        }
+        refreshProducts()
     }
 }
 
@@ -54,20 +54,20 @@ class ProductsViewController: UIViewController {
 //MARK: - UITableViewDataSource
 extension ProductsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.productSection[section].products.count
+        return viewModel.numberOfRows(at: section)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if viewModel.productSection.count == 0 {
+        if viewModel.numberOfSections() == 0 {
             tableView.setEmptyMessage("Список пуст")
         } else {
             tableView.restore()
         }
-        return viewModel.productSection.count
+        return viewModel.numberOfSections()
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return viewModel.productSection[section].name
+        return viewModel.titleForSection(at: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -75,20 +75,6 @@ extension ProductsViewController: UITableViewDataSource {
                                                        for: indexPath) as? ProductViewCell else { return UITableViewCell() }
         cell.viewModel = viewModel.viewModelForCell(at: indexPath)
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            viewModel.deleteProduct(at: indexPath)
-            if viewModel.productSection[indexPath.section].products.count == 1 {
-                viewModel.productSection.remove(at: indexPath.section)
-                let indexSet = IndexSet(arrayLiteral: indexPath.section)
-                tableView.deleteSections(indexSet, with: .fade)
-            } else {
-                viewModel.productSection[indexPath.section].products.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
-        }
     }
 }
 
@@ -102,8 +88,24 @@ extension ProductsViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.openEditProductFlow(at: indexPath)
+        viewModel.updateIsBought(at: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
+        let indexSet = IndexSet(integer: indexPath.section)
+        tableView.reloadSections(indexSet, with: .fade)
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") { (action, view, handler) in
+            self.deleteProduct(at: indexPath)
+        }
+        
+        let editAction = UIContextualAction(style: .normal, title: "Изменить") { action, view, handler in
+            self.viewModel.openEditProductFlow(at: indexPath)
+        }
+        deleteAction.backgroundColor = .systemRed
+        editAction.backgroundColor = .systemYellow
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+        return configuration
     }
 }
 
@@ -114,6 +116,7 @@ extension ProductsViewController {
         title = viewModel.titleForView()
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
+        
         let addButton = UIBarButtonItem(image: UIImage(systemName: "plus"),
                                         style: .plain,
                                         target: self,
@@ -131,6 +134,7 @@ extension ProductsViewController {
         
         navigationItem.rightBarButtonItems = [addButton, editButton, invitesButton]
         view.addSubview(tableView)
+        tableView.addSubview(refreshControl)
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -140,14 +144,39 @@ extension ProductsViewController {
         ])
     }
     
+    private func deleteProduct(at indexPath: IndexPath) {
+        viewModel.deleteProduct(at: indexPath)
+        if viewModel.numberOfRows(at: indexPath.section) == 1 {
+            viewModel.removeSection(at: indexPath.section)
+            let indexSet = IndexSet(arrayLiteral: indexPath.section)
+            tableView.deleteSections(indexSet, with: .fade)
+        } else {
+            viewModel.removeProduct(at: indexPath)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
+    @objc
+    private func refreshProducts() {
+        fetchProducts()
+    }
+    
     private func updateData() {
         view.activityStopAnimating()
+        refreshControl.endRefreshing()
         tableView.reloadData()
+    }
+    
+    private func fetchProducts() {
+        viewModel.fetchProducts { [weak self] in
+            self?.updateData()
+        }
     }
     
     @objc
     private func newProductTouched() {
         viewModel.openNewProductFlow()
+//        showNewProductAlert()
     }
     
     @objc
@@ -164,7 +193,7 @@ extension ProductsViewController {
         guard let email = email, email != "" else { return }
         viewModel.inviteUser(email: email)
     }
- 
+    
     private func showInviteAlert() {
         let ac = UIAlertController(title: "Пригласите друга для совместного редактирования",
                                    message: "Ввведите email пользователя которого хотите пригласить",

@@ -8,7 +8,7 @@
 import Foundation
 
 protocol NewProductsCategoriesViewModelProtocol {
-    var productCategories: [ProductCategoryBundle] { get set }
+    var productCategories: [ProductSectionsBundle] { get set }
     func fetchProductCategories(_ completion: @escaping(() -> Void))
     func categorySelected(at indexPath: IndexPath)
 }
@@ -17,7 +17,7 @@ final class NewProductsCategoriesViewModel: NewProductsCategoriesViewModelProtoc
     
     let dataProvider: DataProviderProtocol
     var didSentEventClosure: ((NewProductsCategoriesViewModel.Event) -> Void)?
-    var productCategories: [ProductCategoryBundle] = []
+    var productCategories: [ProductSectionsBundle] = []
     
     init(dataProvider: DataProviderProtocol) {
         self.dataProvider = dataProvider
@@ -39,6 +39,6 @@ final class NewProductsCategoriesViewModel: NewProductsCategoriesViewModelProtoc
 
 extension NewProductsCategoriesViewModel {
     enum Event {
-        case selectCategory(ProductCategoryBundle)
+        case selectCategory(ProductSectionsBundle)
     }
 }

@@ -14,6 +14,7 @@ protocol ListsViewModelProtocol {
     func viewModelForCell(indexPath: IndexPath) -> ListCellViewModel
     func selectProductList(indexPath: IndexPath)
     func removeProductListAt(_ indexPath: IndexPath)
+    func showInvitesFlow()
 }
 
 final class ListsViewModel: ListsViewModelProtocol {
@@ -41,7 +42,7 @@ final class ListsViewModel: ListsViewModelProtocol {
     func removeProductListAt(_ indexPath: IndexPath) {
         let productListID = productLists[indexPath.row]._id
         productLists.remove(at: indexPath.row)
-        dataProvider.deleteProductList(productListID: productListID)
+        dataProvider.removeToTrashProductList(productListID: productListID)
     }
     
     func selectProductList(indexPath: IndexPath) {
@@ -52,11 +53,16 @@ final class ListsViewModel: ListsViewModelProtocol {
     func viewModelForCell(indexPath: IndexPath) -> ListCellViewModel {
         return ListCellViewModel(productList: productLists[indexPath.row])
     }
+    
+    func showInvitesFlow() {
+        didSentEventClosure?(.invites)
+    }
 }
 
 extension ListsViewModel {
     enum Event {
         case addList
         case selectProductList(list: ProductList)
+        case invites
     }
 }

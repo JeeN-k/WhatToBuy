@@ -20,13 +20,19 @@ final class TrashViewController: UIViewController {
         return tableView
     }()
     
-    let viewModel: TrashViewModel
+    let viewModel: TrashViewModelProtocol
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        view.activityStartAnimating(backgroundColor: .systemBackground)
         viewModel.fetchRemovedLists {
-            self.tableView.reloadData()
+            self.updateData()
         }
     }
     
@@ -42,7 +48,16 @@ final class TrashViewController: UIViewController {
 
 extension TrashViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.productLists.count
+        return viewModel.numberOfItems()
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if viewModel.numberOfItems() == 0 {
+            tableView.setEmptyMessage("Корзина пуста")
+        } else {
+            tableView.restore()
+        }
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -54,7 +69,21 @@ extension TrashViewController: UITableViewDataSource {
 }
 
 extension TrashViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") { (action, view, handler) in
+            self.deleteListTouched(at: indexPath)
+        }
+        
+        let restoreAction = UIContextualAction(style: .normal, title: "Вернуть") { (action, view, handler) in
+            self.restoreListTouched(at: indexPath)
+        }
+        
+        deleteAction.backgroundColor = .systemRed
+        restoreAction.backgroundColor = .systemGreen
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction, restoreAction])
+        configuration.performsFirstActionWithFullSwipe = false
+        return configuration
+    }
 }
 
 extension TrashViewController {
@@ -71,5 +100,20 @@ extension TrashViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+    }
+    
+    private func deleteListTouched(at indexPath: IndexPath) {
+        viewModel.deleteList(at: indexPath)
+        tableView.deleteRows(at: [indexPath], with: .fade)
+    }
+    
+    private func restoreListTouched(at indexPath: IndexPath) {
+        viewModel.restoreList(at: indexPath)
+        tableView.deleteRows(at: [indexPath], with: .fade)
+    }
+    
+    private func updateData() {
+        tableView.reloadData()
+        view.activityStopAnimating()
     }
 }

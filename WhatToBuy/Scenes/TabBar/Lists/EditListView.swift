@@ -17,7 +17,7 @@ class EditListView: UIView {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.font = UIFont.systemFont(ofSize: 22)
-        textField.placeholder = "Новый список"
+        textField.placeholder = "Название"
         return textField
     }()
     
@@ -100,9 +100,9 @@ extension EditListView {
         addSubviews(views)
         
         NSLayoutConstraint.activate([
-            nameTextField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
+            nameTextField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
             nameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            nameTextField.trailingAnchor.constraint(equalTo: trailingAnchor),
+            nameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             
             colorLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 20),
             colorLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
@@ -111,7 +111,7 @@ extension EditListView {
             iconPicker.topAnchor.constraint(equalTo: colorLabel.bottomAnchor, constant: 10),
             iconPicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             iconPicker.trailingAnchor.constraint(equalTo: trailingAnchor),
-            iconPicker.bottomAnchor.constraint(equalTo: centerYAnchor)
+            iconPicker.bottomAnchor.constraint(equalTo: centerYAnchor, constant: 50)
         ])
     }
 }

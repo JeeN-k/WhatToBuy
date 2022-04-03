@@ -8,21 +8,21 @@
 import Foundation
 
 protocol NewProductViewModelProtocol {
-    var productCategory: ProductCategoryBundle { get }
+    var products: Observable<[Product]> { get }
+    var productCategory: ProductSectionsBundle { get }
     func titleForView() -> String
     func viewModelForCell(at indexPath: IndexPath) -> NewProductCellViewModel
     func productTouched(at indexPath: IndexPath)
-    var products: Observable<[Product]> { get }
 }
 
 final class NewProductViewModel: NewProductViewModelProtocol {
     weak var coordinator: NewProductCoordinator?
     let dataProvider: DataProviderProtocol
-    var productCategory: ProductCategoryBundle
+    var productCategory: ProductSectionsBundle
     var products: Observable<[Product]> = Observable([])
-    var productListId: String
+    private var productListId: String
     
-    init(dataProvider: DataProviderProtocol, productCategory: ProductCategoryBundle, products: [Product], productListId: String) {
+    init(dataProvider: DataProviderProtocol, productCategory: ProductSectionsBundle, products: [Product], productListId: String) {
         self.dataProvider = dataProvider
         self.productCategory = productCategory
         self.products.value = products
@@ -34,13 +34,13 @@ final class NewProductViewModel: NewProductViewModelProtocol {
     }
     
     func viewModelForCell(at indexPath: IndexPath) -> NewProductCellViewModel {
-        let product = productCategory.sections[indexPath.section].items[indexPath.row]
+        let product = productCategory.items[indexPath.row]
         let isContains = products.value.contains(where: { $0.name == product })
         return NewProductCellViewModel(isAdded: isContains, name: product)
     }
     
     func productTouched(at indexPath: IndexPath) {
-        let productName = productCategory.sections[indexPath.section].items[indexPath.row]
+        let productName = productCategory.items[indexPath.row]
         let isContains = products.value.contains(where: { $0.name == productName })
         if !isContains {
             let product = Product(name: productName,

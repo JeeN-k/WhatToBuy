@@ -38,7 +38,7 @@ class AddListViewController: UIViewController {
 
 extension AddListViewController {
     private func configureView() {
-        title = "Изменить список"
+        title = "Новый список"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
                                                            target: self,

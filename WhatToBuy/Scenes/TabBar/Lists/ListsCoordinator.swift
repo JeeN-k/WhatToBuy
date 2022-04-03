@@ -52,7 +52,7 @@ class ListsCoordinator: Coordinator {
     }
     
     private func showListsViewController() {
-        let dataProvider: DataProviderProtocol = DataProvider()
+        let dataProvider = DataProvider()
         let listsViewModel = ListsViewModel(dataProvider: dataProvider)
         let listsViewController = ListsViewController(viewModel: listsViewModel)
         listsViewModel.didSentEventClosure = { [weak self] event in
@@ -61,13 +61,23 @@ class ListsCoordinator: Coordinator {
                 self?.showNewListViewController()
             case .selectProductList(let list):
                 self?.showProductsViewController(productList: list)
+            case .invites:
+                self?.showInvitesViewController()
             }
         }
         navigationController.pushViewController(listsViewController, animated: true)
     }
     
-    func showProductsViewController(productList: ProductList) {
-        let dataProvider: DataProviderProtocol = DataProvider()
+    private func showInvitesViewController() {
+        let dataProvider = DataProvider()
+        let invitesViewModel = InvitesViewModel(dataProvider: dataProvider)
+        let invitesViewController = UINavigationController(rootViewController:
+                                                            InvitesListViewController(viewModel: invitesViewModel))
+        navigationController.present(invitesViewController, animated: true)
+    }
+    
+    private func showProductsViewController(productList: ProductList) {
+        let dataProvider = DataProvider()
         let productsViewModel = ProductsViewModel(dataProvider: dataProvider, productList: productList)
         let productsViewController = ProductsViewController(viewModel: productsViewModel)
         productsViewModel.didSentEventClosure = { [weak self] event in
@@ -83,8 +93,8 @@ class ListsCoordinator: Coordinator {
         navigationController.pushViewController(productsViewController, animated: true)
     }
     
-    func showNewListViewController() {
-        let dataProvider: DataProviderProtocol = DataProvider()
+    private func showNewListViewController() {
+        let dataProvider = DataProvider()
         let newListViewModel = AddListViewModel(dataProvider: dataProvider)
         let newListViewController = AddListViewController(viewModel: newListViewModel)
         newListViewModel.didSentEventClosure = { [weak self] event in

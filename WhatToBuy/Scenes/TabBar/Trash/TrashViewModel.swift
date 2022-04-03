@@ -7,7 +7,15 @@
 
 import Foundation
 
-final class TrashViewModel {
+protocol TrashViewModelProtocol {
+    func fetchRemovedLists(completion: @escaping () -> Void)
+    func deleteList(at indexPath: IndexPath)
+    func restoreList(at indexPath: IndexPath)
+    func viewModelForCell(at indexPath: IndexPath) -> ListCellViewModel
+    func numberOfItems() -> Int
+}
+
+final class TrashViewModel: TrashViewModelProtocol {
     let dataProvider: DataProviderProtocol
     var productLists: [ProductList] = []
     
@@ -21,6 +29,22 @@ final class TrashViewModel {
             self.productLists = removedLists
             completion()
         }
+    }
+    
+    func numberOfItems() -> Int {
+        return productLists.count
+    }
+    
+    func deleteList(at indexPath: IndexPath) {
+        let list = productLists[indexPath.row]
+        dataProvider.deleteProductList(listId: list._id)
+        productLists.remove(at: indexPath.row)
+    }
+    
+    func restoreList(at indexPath: IndexPath) {
+        let list = productLists[indexPath.row]
+        dataProvider.restoreFromTrashProductList(listId: list._id)
+        productLists.remove(at: indexPath.row)
     }
     
     func viewModelForCell(at indexPath: IndexPath) -> ListCellViewModel {

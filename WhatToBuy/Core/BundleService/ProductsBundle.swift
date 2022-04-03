@@ -8,12 +8,7 @@
 import Foundation
 
 struct ProductCategoriesBundle: Codable {
-    var categories: [ProductCategoryBundle]
-}
-
-struct ProductCategoryBundle: Codable {
-    var name: String
-    var sections: [ProductSectionsBundle]
+    var categories: [ProductSectionsBundle]
 }
 
 struct ProductSectionsBundle: Codable {

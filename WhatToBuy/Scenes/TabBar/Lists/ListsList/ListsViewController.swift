@@ -19,6 +19,14 @@ class ListsViewController: UIViewController {
         return tableView
     }()
     
+    private lazy var refreshControl: UIRefreshControl = {
+        let refresher = UIRefreshControl()
+        refresher.addTarget(self, action: #selector(refreshLists), for: .valueChanged)
+        refresher.tintColor = .systemIndigo
+        refresher.attributedTitle = NSAttributedString(string: "Обновление", attributes: [:])
+        return refresher
+    }()
+    
     var viewModel: ListsViewModelProtocol
     
     init(viewModel: ListsViewModelProtocol) {
@@ -33,15 +41,8 @@ class ListsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-    }
-    
-    //TODO: CHANGE THIS TO DELEGATE
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         view.activityStartAnimating(backgroundColor: .systemBackground)
-        viewModel.fetchLists { [weak self] in
-            self?.updateData()
-        }
+        fetchData()
     }
 }
 
@@ -93,13 +94,18 @@ extension ListsViewController {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
         let addButton = UIBarButtonItem(image: UIImage(systemName: "plus"),
-                                        style: .plain, target: self, action: #selector(newListTouched))
+                                        style: .plain,
+                                        target: self,
+                                        action: #selector(newListTouched))
         
         let invitesList = UIBarButtonItem(image: UIImage(systemName: "person.wave.2"),
-                                          style: .plain, target: self, action: nil)
+                                          style: .plain,
+                                          target: self,
+                                          action: #selector(invitesTouched))
         navigationItem.rightBarButtonItems = [addButton, invitesList]
         
         view.addSubview(tableView)
+        tableView.addSubview(refreshControl)
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -111,11 +117,28 @@ extension ListsViewController {
     
     private func updateData() {
         view.activityStopAnimating()
+        refreshControl.endRefreshing()
         tableView.reloadData()
+    }
+    
+    private func fetchData() {
+        viewModel.fetchLists { [weak self] in
+            self?.updateData()
+        }
+    }
+    
+    @objc
+    private func refreshLists() {
+        fetchData()
     }
     
     @objc
     private func newListTouched() {
         viewModel.addNewList()
+    }
+    
+    @objc
+    private func invitesTouched() {
+        viewModel.showInvitesFlow()
     }
 }

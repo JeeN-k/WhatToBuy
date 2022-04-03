@@ -57,7 +57,7 @@ class WelcomeViewController: UIViewController {
         button.setTitleColor(UIColor.white, for: .normal)
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .systemGray
+        button.backgroundColor = .systemIndigo.withAlphaComponent(0.7)
         button.addTarget(self, action: #selector(signInTouched), for: .touchUpInside)
         return button
     }()
@@ -70,21 +70,26 @@ class WelcomeViewController: UIViewController {
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(signUpTouched), for: .touchUpInside)
-        button.backgroundColor = .systemGray
+        button.backgroundColor = .systemIndigo.withAlphaComponent(0.7)
         return button
     }()
     
     private lazy var missAuthButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Пропустить регистрацию", for: .normal)
+        button.setTitle("Пропустить авторизацию", for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .systemGray
+        button.backgroundColor = .systemIndigo.withAlphaComponent(0.7)
         button.addTarget(self, action: #selector(missSignInTouched), for: .touchUpInside)
         return button
     }()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setGradientBackground()
+        super.viewWillAppear(true)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,9 +98,9 @@ class WelcomeViewController: UIViewController {
 }
 
 extension WelcomeViewController {
-    func configureView() {
+    private func configureView() {
         
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemTeal
         let views = [welcomeLabel, welcomeTitleLabel, benefitTextLabel, benefitTitleLabel, signInButton, signUpButton, missAuthButton]
         view.addSubviews(views)
         
@@ -132,6 +137,18 @@ extension WelcomeViewController {
             benefitTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             benefitTitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
+    }
+    
+    private func setGradientBackground() {
+        let colorTop = UIColor.systemTeal.cgColor
+        let colorBottom = UIColor.systemBlue.cgColor
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [colorTop, colorBottom]
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.frame = view.bounds
+        
+        view.layer.insertSublayer(gradientLayer, at: 0)
     }
     
     @objc

@@ -46,21 +46,7 @@ final class ProductViewCell: UITableViewCell {
     
     var viewModel: ProductCellViewModel? {
         didSet {
-            guard let viewModel = viewModel else { return }
-            titleLabel.text = viewModel.name
-            noteLabel.text = viewModel.note
-            if let count = viewModel.count, count != 0 {
-                countLabel.isHidden = false
-                countLabel.text = "\(count) шт"
-            } else {
-                countLabel.isHidden = true
-            }
-            if let price = viewModel.price, price != 0 {
-                priceLabel.isHidden = false
-                priceLabel.text = "\(price) P"
-            } else {
-                priceLabel.isHidden = true
-            }
+            setupCell()
         }
     }
     
@@ -97,8 +83,39 @@ extension ProductViewCell {
         ])
         
         let bottomBorder = CALayer()
-        bottomBorder.frame = CGRect(x: 16, y: 59, width: UIScreen.main.bounds.maxX - 16, height: 1.0)
-        bottomBorder.backgroundColor = UIColor(white: 0.8, alpha: 1.0).cgColor
+        bottomBorder.frame = CGRect(x: 16, y: 55, width: UIScreen.main.bounds.maxX - 16, height: 1)
+        bottomBorder.backgroundColor = UIColor.systemGray.withAlphaComponent(0.2).cgColor
         contentView.layer.addSublayer(bottomBorder)
+    }
+    
+    private func setupCell() {
+        guard let viewModel = viewModel else { return }
+        if viewModel.isBought {
+            titleLabel.textColor = .systemGray
+            countLabel.textColor = .systemGray
+        } else {
+            titleLabel.textColor = .label
+            countLabel.textColor = .label
+        }
+        
+        titleLabel.text = viewModel.name
+        if let note = viewModel.note, note != "" {
+            noteLabel.text = viewModel.note
+            noteLabel.isHidden = false
+        } else {
+            noteLabel.isHidden = true
+        }
+        if let count = viewModel.count, count != 0 {
+            countLabel.isHidden = false
+            countLabel.text = "\(count) шт"
+        } else {
+            countLabel.isHidden = true
+        }
+        if let price = viewModel.price, price != 0 {
+            priceLabel.isHidden = false
+            priceLabel.text = "\(price) P"
+        } else {
+            priceLabel.isHidden = true
+        }
     }
 }

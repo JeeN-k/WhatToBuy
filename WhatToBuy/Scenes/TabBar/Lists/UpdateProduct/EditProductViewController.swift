@@ -12,6 +12,7 @@ final class EditProductViewContrtoller: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.isScrollEnabled = false
+        tableView.rowHeight = 60
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -51,12 +52,12 @@ extension EditProductViewContrtoller: UITableViewDataSource {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "headerProductCell", for: indexPath) as! EditProductHeaderCell
             cell.viewModel = viewModel.viewModelForCell()
-            cell.delegate = self
+            cell.viewModel?.headerDelegate = viewModel
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "fieldProductCell", for: indexPath) as! EditProductFieldsCell
             cell.viewModel = viewModel.viewModelForCell()
-            cell.delegate = self
+            cell.viewModel?.propertyDelegate = viewModel
             switch indexPath.row {
             case 0:
                 cell.setupCell(type: .count)
@@ -73,17 +74,7 @@ extension EditProductViewContrtoller: UITableViewDataSource {
 }
 
 extension EditProductViewContrtoller: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 30
-        } else {
-            return 0
-        }
-    }
+  
 }
 
 extension EditProductViewContrtoller {
@@ -135,28 +126,3 @@ extension EditProductViewContrtoller {
         viewModel.cancelUpdate()
     }
 }
-
-extension EditProductViewContrtoller: HeaderEditedDelegate {
-    func productNameEdited(name: String?) {
-        guard let name = name else { return }
-        viewModel.product.name = name
-    }
-}
-
-extension EditProductViewContrtoller: ProductPropertiesDelegate {
-    func propertyEdited(with data: String?, type: EditProductCellType) {
-        guard let data = data else { return }
-        switch type {
-        case .count:
-            guard let count = Int(data) else { return }
-            viewModel.product.count = count
-        case .price:
-            guard let price = Float(data) else { return }
-            viewModel.product.price = price
-        case .note:
-            viewModel.product.note = data
-        }
-    }
-}
-
-

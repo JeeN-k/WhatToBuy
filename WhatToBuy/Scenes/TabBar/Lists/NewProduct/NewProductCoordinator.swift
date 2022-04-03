@@ -37,7 +37,7 @@ class NewProductCoordinator: Coordinator {
         navigationController.pushViewController(newProductCategoryController, animated: true)
     }
     
-    func showProductsOfCategory(productCategory: ProductCategoryBundle) {
+    func showProductsOfCategory(productCategory: ProductSectionsBundle) {
         let dataProvider: DataProviderProtocol = DataProvider()
         let newProductsViewModel = NewProductViewModel(dataProvider: dataProvider,
                                                        productCategory: productCategory,

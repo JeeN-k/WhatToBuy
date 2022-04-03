@@ -7,9 +7,7 @@
 
 import UIKit
 
-protocol HeaderEditedDelegate {
-    func productNameEdited(name: String?)
-}
+
 
 final class EditProductHeaderCell: UITableViewCell {
     
@@ -19,12 +17,11 @@ final class EditProductHeaderCell: UITableViewCell {
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "Название"
         textField.textColor = .white
+        textField.tintColor = .white
         textField.setLeftPaddingPoints(16)
         textField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         return textField
     }()
-    
-    var delegate: HeaderEditedDelegate?
     
     var viewModel: EditProductCellViewModel? {
         didSet {
@@ -58,7 +55,6 @@ extension EditProductHeaderCell {
     
     @objc
     private func textFieldChanged() {
-        guard let delegate = delegate else { return }
-        delegate.productNameEdited(name: textField.text)
+        viewModel?.titleChanged(with: textField.text)
     }
 }

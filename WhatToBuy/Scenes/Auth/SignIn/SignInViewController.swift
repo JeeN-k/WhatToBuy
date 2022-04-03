@@ -170,7 +170,9 @@ extension SignInViewController {
     @objc
     private func signInTapped() {
         guard let email = emailTextField.text, let password = passwordTextField.text else { return }
+        view.activityStartAnimating(backgroundColor: .gray.withAlphaComponent(0.5))
         viewModel.signIn(email: email, password: password) { [weak self] message in
+            self?.view.activityStopAnimating()
             self?.showAlertWith(text: message)
         }
     }

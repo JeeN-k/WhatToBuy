@@ -182,7 +182,9 @@ extension SignUpViewController {
         guard let name = nameTextField.text,
                 let password = passwordTextField.text,
                 let email = emailTextField.text else { return }
+        view.activityStartAnimating(backgroundColor: .systemGray.withAlphaComponent(0.3))
         viewModel.signUpUser(name: name, password: password, email: email) { [weak self] message in
+            self?.view.activityStopAnimating()
             self?.showAlertWith(text: message)
         }
     }

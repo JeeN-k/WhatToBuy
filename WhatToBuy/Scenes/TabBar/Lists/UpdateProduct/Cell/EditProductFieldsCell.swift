@@ -13,10 +13,6 @@ enum EditProductCellType: String {
     case note = "Заметка"
 }
 
-protocol ProductPropertiesDelegate {
-    func propertyEdited(with data: String?, type: EditProductCellType)
-}
-
 final class EditProductFieldsCell: UITableViewCell {
     
     private lazy var nameLable: UILabel = {
@@ -48,7 +44,6 @@ final class EditProductFieldsCell: UITableViewCell {
     }()
     
     var viewModel: EditProductCellViewModel?
-    var delegate: ProductPropertiesDelegate?
     var cellType: EditProductCellType?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -64,6 +59,7 @@ final class EditProductFieldsCell: UITableViewCell {
         case .count:
             stepper.isHidden = false
             textField.isEnabled = false
+            stepper.value = Double(viewModel?.product.count ?? 0)
             textField.text = "\(viewModel?.product.count ?? 0)"
         case .price:
             textField.isEnabled = true
@@ -124,6 +120,6 @@ extension EditProductFieldsCell {
     
     private func valueChanged(with value: String?) {
         guard let cellType = cellType else { return }
-        delegate?.propertyEdited(with: value, type: cellType)
+        viewModel?.properyChanged(with: value, type: cellType)
     }
 }
