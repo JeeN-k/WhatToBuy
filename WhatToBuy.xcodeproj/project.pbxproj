@@ -10,6 +10,13 @@
 		1F40D9A327F9C20F003A6776 /* RestoreFromTrashRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F40D9A227F9C20E003A6776 /* RestoreFromTrashRequest.swift */; };
 		1F40D9A527F9C292003A6776 /* TotalDeleteListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F40D9A427F9C292003A6776 /* TotalDeleteListRequest.swift */; };
 		1F40D9A727F9EFB0003A6776 /* BoughtUpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F40D9A627F9EFB0003A6776 /* BoughtUpdateRequest.swift */; };
+		1F40D9AB27FB54F4003A6776 /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F40D9AA27FB54F4003A6776 /* SettingsCoordinator.swift */; };
+		1F40D9AD27FB551E003A6776 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F40D9AC27FB551E003A6776 /* SettingsViewController.swift */; };
+		1F40D9AF27FB58EA003A6776 /* AccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F40D9AE27FB58EA003A6776 /* AccountCell.swift */; };
+		1F40D9B127FB5945003A6776 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F40D9B027FB5945003A6776 /* SettingCell.swift */; };
+		1F40D9B327FB631E003A6776 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F40D9B227FB631E003A6776 /* SettingModel.swift */; };
+		1F40D9B527FB698F003A6776 /* SwitchSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F40D9B427FB698F003A6776 /* SwitchSettingCell.swift */; };
+		1F40D9B727FB6C26003A6776 /* ExitAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F40D9B627FB6C26003A6776 /* ExitAccountCell.swift */; };
 		1F672CAD27EB7C0900E4D6A6 /* AddListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672CAC27EB7C0900E4D6A6 /* AddListViewController.swift */; };
 		1F672CAF27EB863900E4D6A6 /* String+HexToColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672CAE27EB863900E4D6A6 /* String+HexToColor.swift */; };
 		1F672CB127EB91EC00E4D6A6 /* ListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F672CB027EB91EC00E4D6A6 /* ListCellView.swift */; };
@@ -119,6 +126,13 @@
 		1F40D9A227F9C20E003A6776 /* RestoreFromTrashRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreFromTrashRequest.swift; sourceTree = "<group>"; };
 		1F40D9A427F9C292003A6776 /* TotalDeleteListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalDeleteListRequest.swift; sourceTree = "<group>"; };
 		1F40D9A627F9EFB0003A6776 /* BoughtUpdateRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoughtUpdateRequest.swift; sourceTree = "<group>"; };
+		1F40D9AA27FB54F4003A6776 /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
+		1F40D9AC27FB551E003A6776 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		1F40D9AE27FB58EA003A6776 /* AccountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCell.swift; sourceTree = "<group>"; };
+		1F40D9B027FB5945003A6776 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
+		1F40D9B227FB631E003A6776 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
+		1F40D9B427FB698F003A6776 /* SwitchSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchSettingCell.swift; sourceTree = "<group>"; };
+		1F40D9B627FB6C26003A6776 /* ExitAccountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExitAccountCell.swift; sourceTree = "<group>"; };
 		1F672CAC27EB7C0900E4D6A6 /* AddListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddListViewController.swift; sourceTree = "<group>"; };
 		1F672CAE27EB863900E4D6A6 /* String+HexToColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+HexToColor.swift"; sourceTree = "<group>"; };
 		1F672CB027EB91EC00E4D6A6 /* ListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCellView.swift; sourceTree = "<group>"; };
@@ -433,6 +447,13 @@
 		1F672CF927EF775A00E4D6A6 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				1F40D9AA27FB54F4003A6776 /* SettingsCoordinator.swift */,
+				1F40D9AC27FB551E003A6776 /* SettingsViewController.swift */,
+				1F40D9B227FB631E003A6776 /* SettingModel.swift */,
+				1F40D9AE27FB58EA003A6776 /* AccountCell.swift */,
+				1F40D9B027FB5945003A6776 /* SettingCell.swift */,
+				1F40D9B427FB698F003A6776 /* SwitchSettingCell.swift */,
+				1F40D9B627FB6C26003A6776 /* ExitAccountCell.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -776,6 +797,7 @@
 				1F40D9A527F9C292003A6776 /* TotalDeleteListRequest.swift in Sources */,
 				1F672DBD27F8980400E4D6A6 /* InviteCellView.swift in Sources */,
 				1FD8C82927E8E10F005676CA /* AppDelegate.swift in Sources */,
+				1F40D9B327FB631E003A6776 /* SettingModel.swift in Sources */,
 				1F672D2C27EFB9BD00E4D6A6 /* Product.swift in Sources */,
 				1F672D6C27F6035B00E4D6A6 /* TrashViewController.swift in Sources */,
 				1F672D2527EFB58C00E4D6A6 /* ProductMO+CoreDataProperties.swift in Sources */,
@@ -791,10 +813,12 @@
 				1F672DC227F8B17500E4D6A6 /* InviteReseponse.swift in Sources */,
 				1F672D2627EFB58C00E4D6A6 /* ProductListMO+CoreDataClass.swift in Sources */,
 				1F672D9727F70BAF00E4D6A6 /* EditListView.swift in Sources */,
+				1F40D9AD27FB551E003A6776 /* SettingsViewController.swift in Sources */,
 				1F672DB427F793EC00E4D6A6 /* ProductRequest.swift in Sources */,
 				1F672DB827F7B16F00E4D6A6 /* InvitesViewController.swift in Sources */,
 				1F672CD627EE3BB700E4D6A6 /* Coordinator.swift in Sources */,
 				1F672CFD27EF77E700E4D6A6 /* ListsViewModel.swift in Sources */,
+				1F40D9B727FB6C26003A6776 /* ExitAccountCell.swift in Sources */,
 				1F672CC227EE1B5F00E4D6A6 /* DataProvider.swift in Sources */,
 				1F672D1827EFA1F000E4D6A6 /* PickerSelection.swift in Sources */,
 				1F672DB027F7920A00E4D6A6 /* ProductRequestBody.swift in Sources */,
@@ -809,6 +833,7 @@
 				1F672DC427F8B18B00E4D6A6 /* Invite.swift in Sources */,
 				1F672CD827EE3C1C00E4D6A6 /* MainCoordinator.swift in Sources */,
 				1F672CB827EE15B800E4D6A6 /* NewProductsCategoriesViewController.swift in Sources */,
+				1F40D9AB27FB54F4003A6776 /* SettingsCoordinator.swift in Sources */,
 				1F672D6E27F603E500E4D6A6 /* TrashViewModel.swift in Sources */,
 				1F672D6427F4CEB800E4D6A6 /* BasicResponse.swift in Sources */,
 				1F40D9A727F9EFB0003A6776 /* BoughtUpdateRequest.swift in Sources */,
@@ -831,11 +856,13 @@
 				1F672D5C27F4C0DB00E4D6A6 /* FetchProductsRequest.swift in Sources */,
 				1F672D3F27F0E2B000E4D6A6 /* UIViewController+HidingKeyboard.swift in Sources */,
 				1F672CE727EF337600E4D6A6 /* SignUpViewModel.swift in Sources */,
+				1F40D9B527FB698F003A6776 /* SwitchSettingCell.swift in Sources */,
 				1F672D6227F4CDC300E4D6A6 /* DeleteProductRequest.swift in Sources */,
 				1F672CC627EE1FA100E4D6A6 /* NewProductViewController.swift in Sources */,
 				1F672D4927F2218D00E4D6A6 /* SignInDataRequest.swift in Sources */,
 				1F672D1027EF993600E4D6A6 /* ListColor.swift in Sources */,
 				1F672CBC27EE1A3800E4D6A6 /* ProductsBundle.swift in Sources */,
+				1F40D9B127FB5945003A6776 /* SettingCell.swift in Sources */,
 				1F672D7227F606DE00E4D6A6 /* FetchRemovedListsRequest.swift in Sources */,
 				1F672CE427EF2FC700E4D6A6 /* WelcomeViewModel.swift in Sources */,
 				1FD8C83D27E8E7B6005676CA /* UIView+AddSubviews.swift in Sources */,
@@ -865,6 +892,7 @@
 				1FD8C84927E8F6D2005676CA /* UITableView+EmptyTitle.swift in Sources */,
 				1FD8C83F27E8EDAF005676CA /* SignUpViewController.swift in Sources */,
 				1FD8C84727E8F564005676CA /* ListsViewController.swift in Sources */,
+				1F40D9AF27FB58EA003A6776 /* AccountCell.swift in Sources */,
 				1F672CF127EF4C2F00E4D6A6 /* NetworkService.swift in Sources */,
 				1F672D3227F08DFF00E4D6A6 /* NewProductViewModel.swift in Sources */,
 				1F672DAE27F77F0100E4D6A6 /* EditProductCellViewModel.swift in Sources */,
