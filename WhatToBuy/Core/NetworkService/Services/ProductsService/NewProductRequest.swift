@@ -8,7 +8,7 @@
 import Foundation
 
 struct NewProductRequest: DataRequest {
-    private let authToken = TokenManager.token ?? ""
+    private let authToken = AccountManager.authToken ?? ""
     let product: ProductRequest
     let listId: String
     

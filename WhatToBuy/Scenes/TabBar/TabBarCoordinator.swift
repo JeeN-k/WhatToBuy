@@ -16,7 +16,7 @@ protocol TabBarCoordinatorProtocol: Coordinator {
 
 final class TabBarCoordinator: NSObject, TabBarCoordinatorProtocol {
     var tabBarController: UITabBarController
-    weak var finishDelegate: CoordinatorFinishDelegate?
+    var finishDelegate: CoordinatorFinishDelegate?
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
     var type: CoordinatorType { .tab }

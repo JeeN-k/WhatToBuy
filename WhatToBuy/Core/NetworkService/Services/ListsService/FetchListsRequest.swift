@@ -9,7 +9,7 @@ import Foundation
 
 struct FetchListsRequest: DataRequest {
     typealias Response = ProductListResponse
-    private let authToken = TokenManager.token ?? ""
+    private let authToken = AccountManager.authToken ?? ""
     
     var urlPath: String {
         return "/productlists/byuser"

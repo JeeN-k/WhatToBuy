@@ -21,7 +21,7 @@ final class SignUpViewModel: SignUpViewModelProtocol {
     }
     
     func signUpUser(name: String, password: String, email: String, completion: @escaping((String) -> Void)) {
-        let user = User(name: name, email: email, password: password)
+        let user = UserData(name: name, email: email, password: password)
         authService.signUpNewUser(user: user) { response in
             completion(response.message)
         }

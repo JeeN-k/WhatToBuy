@@ -8,7 +8,7 @@
 import Foundation
 
 struct DeleteProductRequest: DataRequest {
-    let authToken = TokenManager.token ?? ""
+    let authToken = AccountManager.authToken ?? ""
     typealias Response = BasicResponse
     var method: HTTPMethod = .delete
     var productId: String

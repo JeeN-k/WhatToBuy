@@ -25,7 +25,7 @@ protocol ProductsViewModelProtocol {
     func deleteProduct(at indexPath: IndexPath)
     func editProductsList()
     func openEditProductFlow(at indexPath: IndexPath)
-    func inviteUser(email: String)
+    func inviteUser(email: String, completion: @escaping(String) -> Void)
     func updateIsBought(at indexPath: IndexPath)
 }
 
@@ -106,8 +106,11 @@ final class ProductsViewModel: ProductsViewModelProtocol {
         didSentEventClosure?(.editProduct(product))
     }
     
-    func inviteUser(email: String) {
-        dataProvider.inviteUserToList(email: email, listId: productList._id)
+    func inviteUser(email: String, completion: @escaping(String) -> Void) {
+        dataProvider.inviteUserToList(email: email, listId: productList._id) { response in
+            guard let response = response else { return }
+            completion(response.message)
+        }
     }
     
     func updateIsBought(at indexPath: IndexPath) {

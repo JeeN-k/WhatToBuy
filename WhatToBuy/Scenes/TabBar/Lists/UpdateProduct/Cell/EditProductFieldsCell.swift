@@ -62,18 +62,21 @@ final class EditProductFieldsCell: UITableViewCell {
             stepper.value = Double(viewModel?.product.count ?? 0)
             textField.text = "\(viewModel?.product.count ?? 0)"
         case .price:
-            textField.isEnabled = true
             textField.keyboardType = .decimalPad
             textField.placeholder = cellType.rawValue
             if let price = viewModel?.product.price {
                 textField.text = "\(price)"
             }
         case .note:
-            textField.isEnabled = true
             textField.keyboardType = .default
             textField.placeholder = cellType.rawValue
             textField.text = viewModel?.product.note
         }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        textField.isEnabled = true
     }
     
     required init?(coder: NSCoder) {

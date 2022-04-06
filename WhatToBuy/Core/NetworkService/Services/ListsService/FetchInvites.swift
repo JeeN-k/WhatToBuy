@@ -8,7 +8,7 @@
 import Foundation
 
 struct FetchInvitesRequest: DataRequest {
-    let authToken = TokenManager.token ?? ""
+    let authToken = AccountManager.authToken ?? ""
     typealias Response = InviteResponse
     
     var urlPath: String {

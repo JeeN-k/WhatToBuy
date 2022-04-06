@@ -18,12 +18,13 @@ protocol DataProviderProtocol {
     func fetchRemovedProductLists(completion: @escaping(([ProductList]?) -> Void))
     func updateProductList(productList: ProductList, productListID: String)
     func updateProduct(product: Product, completion: @escaping()->())
-    func inviteUserToList(email: String, listId: String)
+    func inviteUserToList(email: String, listId: String, completion: @escaping(BasicResponse?) -> Void)
     func fetchUserInvites(completion: @escaping(([Invite]?) -> Void))
     func answerToInvite(answerType: AnswerInviteType, listId: String)
     func restoreFromTrashProductList(listId: String)
     func deleteProductList(listId: String)
     func productIsBoughtUpdate(productId: String, isBought: Bool)
+    func changeUserPassword(oldPassword: String, newPassword: String, completion: @escaping(BasicResponse?) -> Void)
 }
 
 class DataProvider: DataProviderProtocol {
@@ -31,8 +32,8 @@ class DataProvider: DataProviderProtocol {
     private let coreDataManager = CoreDataManager.instance
     private let networkService = NetworkService.instance
     
-    var isOfflineMode:Bool {
-        !TokenManager.tokenExists
+    private var isOfflineMode:Bool {
+        !AccountManager.authTokenExists || AccountManager.isOfflineMode
     }
     
     func fetchLists(completion: @escaping (([ProductList]?) -> Void)) {
@@ -55,7 +56,7 @@ class DataProvider: DataProviderProtocol {
     
     func deleteProduct(productId: String) {
         if isOfflineMode {
-            print("Can't do this with offline mode yet")
+            coreDataManager.deleteProduct(id: productId)
         } else {
             let deleteProductRequest = DeleteProductRequest(productId: productId)
             networkService.request(deleteProductRequest) { result in
@@ -114,7 +115,7 @@ class DataProvider: DataProviderProtocol {
     
     func removeToTrashProductList(productListID: String) {
         if isOfflineMode {
-            coreDataManager.deleteProductList(id: productListID)
+            coreDataManager.removeListToTrash(listId: productListID)
         } else {
             let removeToTrashRequest = RemoveToTrashRequest(listId: productListID)
             networkService.request(removeToTrashRequest) { result in
@@ -146,7 +147,9 @@ class DataProvider: DataProviderProtocol {
     
     func fetchRemovedProductLists(completion: @escaping(([ProductList]?) -> Void)) {
         if isOfflineMode {
-            print("Can't do this with offline mode yet")
+            coreDataManager.fetchRemovedLists { lists in
+                completion(lists)
+            }
         } else {
             let removedProductListsRequest = FetchRemovedListsRequest()
             networkService.request(removedProductListsRequest) { result in
@@ -162,7 +165,7 @@ class DataProvider: DataProviderProtocol {
     
     func updateProductList(productList: ProductList, productListID: String) {
         if isOfflineMode {
-            print("Can't do this with offline mode yet")
+            coreDataManager.updateProductList(productList: productList, productListId: productListID)
         } else {
             let updateProductListRequest = UpdateProductListRequest(productList: productList, productListID: productListID)
             networkService.request(updateProductListRequest) { result in
@@ -178,7 +181,9 @@ class DataProvider: DataProviderProtocol {
     
     func updateProduct(product: Product, completion: @escaping()->()) {
         if isOfflineMode {
-            print("Can't do this with offline mode yet")
+            coreDataManager.updateProduct(product: product) {
+                completion()
+            }
         } else {
             let updateProductRequest = UpdateProductRequest(product: product)
             networkService.request(updateProductRequest) { result in
@@ -193,15 +198,15 @@ class DataProvider: DataProviderProtocol {
         }
     }
     
-    func inviteUserToList(email: String, listId: String) {
+    func inviteUserToList(email: String, listId: String, completion: @escaping(BasicResponse?) -> Void) {
         if isOfflineMode {
-            print("Can't do this with offline mode yet")
+            print("Can't do this with offline mode")
         } else {
             let inviteRequest = InviteToListRequest(listId: listId, email: email)
             networkService.request(inviteRequest) { result in
                 switch result {
                 case .success(let response):
-                    print(response.message)
+                    completion(response)
                 case .failure(let error):
                     print(error)
                 }
@@ -243,7 +248,7 @@ class DataProvider: DataProviderProtocol {
     
     func restoreFromTrashProductList(listId: String) {
         if isOfflineMode {
-            print("Can't do this with offline mode")
+            coreDataManager.restoreListFromTrash(listId: listId)
         } else {
             let restoreFromTrashRequest = RestoreFromTrashRequest(listId: listId)
             networkService.request(restoreFromTrashRequest) { result in
@@ -259,7 +264,7 @@ class DataProvider: DataProviderProtocol {
     
     func deleteProductList(listId: String) {
         if isOfflineMode {
-            print("Can't do this with offline mode")
+            coreDataManager.deleteProductList(id: listId)
         } else {
             let deleteProductList = TotalDeleteListRequest(listId: listId)
             networkService.request(deleteProductList) { result in
@@ -275,13 +280,27 @@ class DataProvider: DataProviderProtocol {
     
     func productIsBoughtUpdate(productId: String, isBought: Bool) {
         if isOfflineMode {
-             
+            coreDataManager.productBoughtUpdate(productId: productId, isBought: isBought)
         } else {
             let boughtChangeRequest = BoughtUpdateRequest(productId: productId, isBought: isBought)
             networkService.request(boughtChangeRequest) { result in
                 switch result {
                 case .success(let response):
                     print(response.message)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    func changeUserPassword(oldPassword: String, newPassword: String, completion: @escaping(BasicResponse?) -> Void) {
+        if !isOfflineMode {
+            let newPasswordRequest = ChangePasswordRequest(oldPassword: oldPassword, newPassword: newPassword)
+            networkService.request(newPasswordRequest) { result in
+                switch result {
+                case .success(let response):
+                    completion(response)
                 case .failure(let error):
                     print(error)
                 }

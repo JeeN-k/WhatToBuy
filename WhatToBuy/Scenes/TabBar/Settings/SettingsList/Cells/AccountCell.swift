@@ -59,7 +59,9 @@ final class AccountCell: UITableViewCell {
 
 extension AccountCell {
     func configureCell(from model: SettingsAccount) {
-        nameLabel.text = model.name
-        emailLabel.text = model.email
+        if let user = model.user {
+            nameLabel.text = user.name
+            emailLabel.text = user.email
+        }
     }
 }

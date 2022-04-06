@@ -41,6 +41,10 @@ class ListsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         view.activityStartAnimating(backgroundColor: .systemBackground)
         fetchData()
     }

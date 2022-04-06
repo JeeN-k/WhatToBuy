@@ -11,7 +11,7 @@ class TrashCoordinator: Coordinator {
     weak var finishDelegate: CoordinatorFinishDelegate?
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
-    var type: CoordinatorType { .tab }
+    var type: CoordinatorType { .trash }
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController

@@ -20,6 +20,7 @@ class WelcomeViewModel {
     }
     
     func missAuth() {
+        AccountManager.setUserPassAuth(true)
         didSentEventClosure?(.missAuth)
     }
 }

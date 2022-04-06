@@ -32,5 +32,5 @@ protocol CoordinatorFinishDelegate: AnyObject {
 }
 
 enum CoordinatorType {
-    case main, auth, tab
+    case main, auth, tab, settings, list, trash
 }

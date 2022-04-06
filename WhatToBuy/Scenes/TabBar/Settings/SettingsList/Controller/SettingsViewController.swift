@@ -21,11 +21,28 @@ final class SettingsViewConrtoller: UIViewController {
         return tableView
     }()
     
-    var settingsModel: [SectionsSetting] = []
+    let viewModel: SettingsViewModel
+    
+    init(viewModel: SettingsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        viewModel.settingsModel.bind { _ in
+            self.tableView.reloadData()
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.configureModel()
     }
     
     override func viewWillLayoutSubviews() {
@@ -40,16 +57,16 @@ extension SettingsViewConrtoller: UITableViewDataSource {
         if section == 0 {
             return 1
         } else {
-            return settingsModel[section].options.count
+            return viewModel.settingsModel.value[section].options.count
         }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return settingsModel.count
+        return viewModel.settingsModel.value.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let model = settingsModel[indexPath.section].options[indexPath.row]
+        let model = viewModel.settingsModel.value[indexPath.section].options[indexPath.row]
         switch model {
         case .accountCell(let model):
             guard let cell  = tableView.dequeueReusableCell(
@@ -69,11 +86,15 @@ extension SettingsViewConrtoller: UITableViewDataSource {
                 withIdentifier: "switchSettingCell",
                 for: indexPath) as? SwitchSettingCell else { return UITableViewCell() }
             cell.configureCell(from: model)
+            cell.didSwitchChangeAction = { state in
+                self.viewModel.offlineModeChanged(with: state)
+            }
             return cell
-        case .exitCell:
+        case .exitCell(let model):
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "exitCell",
                 for: indexPath) as? ExitAccountCell else { return UITableViewCell() }
+            cell.configureCell(from: model)
             return cell
         }
     }
@@ -82,9 +103,11 @@ extension SettingsViewConrtoller: UITableViewDataSource {
 extension SettingsViewConrtoller: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
+        let model = viewModel.settingsModel.value[indexPath.section].options[indexPath.row]
+        switch model {
+        case .accountCell:
             return 80
-        } else {
+        default:
             return 44
         }
     }
@@ -93,7 +116,24 @@ extension SettingsViewConrtoller: UITableViewDelegate {
         if section == 0 {
             return nil
         } else {
-            return settingsModel[section].title
+            return viewModel.settingsModel.value[section].title
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let model = viewModel.settingsModel.value[indexPath.section].options[indexPath.row]
+        tableView.deselectRow(at: indexPath, animated: true)
+        switch model {
+        case .exitCell:
+            viewModel.changeLoginStatus()
+        case .staticCell(let model):
+            if model.section == .account {
+                viewModel.resetPassword()
+            } else if model.section == .aboutApp {
+                viewModel.showAboutApp()
+            }
+        default:
+            return
         }
     }
 }
@@ -102,19 +142,14 @@ extension SettingsViewConrtoller {
     private func configureView() {
         title = "Настройки"
         navigationController?.navigationBar.prefersLargeTitles = true
-        configureModel()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(updateView),
+                                               name: NSNotification.Name(rawValue: "UpdateAfterDismiss"),
+                                               object: nil)
     }
     
-    private func configureModel() {
-        settingsModel.append(SectionsSetting(title: "", options: [
-            .accountCell(model: SettingsAccount(name: "My name", email: "example@gmail.com"))
-        ]))
-        settingsModel.append(SectionsSetting(title: "Аккаунт", options: [
-            .staticCell(model: SettingsOption(title: "Сменить пароль", iconName: "pencil")),
-            .swtichCell(model: SettingsSwitchOption(title: "Оффлайн-режим", iconName: "person.fill.xmark", isOn: false))
-        ]))
-        settingsModel.append(SectionsSetting(title: " ", options: [
-            .exitCell
-        ]))
+    @objc
+    private func updateView() {
+        viewModel.configureModel()
     }
 }

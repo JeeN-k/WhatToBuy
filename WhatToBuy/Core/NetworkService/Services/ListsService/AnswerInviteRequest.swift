@@ -8,7 +8,7 @@
 import Foundation
 
 struct AnswerInviteRequest: DataRequest {
-    let authToken = TokenManager.token ?? ""
+    let authToken = AccountManager.authToken ?? ""
     typealias Response = BasicResponse
     let listId: String
     let answerType: AnswerInviteType

@@ -191,7 +191,9 @@ extension ProductsViewController {
     
     private func inviteUserToList(email: String?) {
         guard let email = email, email != "" else { return }
-        viewModel.inviteUser(email: email)
+        viewModel.inviteUser(email: email) { [weak self] message in
+            self?.showAlertWith(text: message)
+        }
     }
     
     private func showInviteAlert() {

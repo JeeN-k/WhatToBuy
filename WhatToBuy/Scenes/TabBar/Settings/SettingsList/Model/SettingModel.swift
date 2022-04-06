@@ -16,21 +16,33 @@ enum SettingsOptionType {
     case accountCell(model: SettingsAccount)
     case staticCell(model: SettingsOption)
     case swtichCell(model: SettingsSwitchOption)
-    case exitCell
+    case exitCell(model: SettingsLogin)
+}
+
+enum Sections {
+    case user
+    case account
+    case aboutApp
+    case exit
 }
 
 struct SettingsSwitchOption {
     let title: String
     let iconName: String
     let isOn: Bool
+    let section: Sections
 }
 
 struct SettingsAccount {
-    let name: String
-    let email: String
+    let user: UserData?
 }
 
 struct SettingsOption {
     let title: String
     let iconName: String
+    let section: Sections
+}
+
+struct SettingsLogin {
+    let isLogined: Bool
 }

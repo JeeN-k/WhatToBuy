@@ -24,6 +24,7 @@ final class SwitchSettingCell: UITableViewCell {
     
     private lazy var offlineModeSwitch: UISwitch = {
         let switcher = UISwitch()
+        switcher.addTarget(self, action: #selector(switchChangeValue), for: .valueChanged)
         return switcher
     }()
     
@@ -32,6 +33,8 @@ final class SwitchSettingCell: UITableViewCell {
         backgroundColor = .secondarySystemBackground
         selectionStyle = .none
     }
+    
+    var didSwitchChangeAction: ((Bool) -> ())?
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -61,5 +64,10 @@ extension SwitchSettingCell {
         titleLabel.text = model.title
         iconImageView.image = UIImage(systemName: model.iconName)
         offlineModeSwitch.isOn = model.isOn
+    }
+    
+    @objc
+    private func switchChangeValue() {
+        didSwitchChangeAction?(offlineModeSwitch.isOn)
     }
 }

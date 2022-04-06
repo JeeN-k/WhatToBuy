@@ -9,7 +9,7 @@ import Foundation
 
 struct UpdateProductListRequest: DataRequest {
     typealias Response = BasicResponse
-    let authToken = TokenManager.token ?? ""
+    let authToken = AccountManager.authToken ?? ""
     let productListID: String
     var productList: ProductListRequestBody
     

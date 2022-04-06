@@ -19,7 +19,7 @@ final class MainCoordinator: Coordinator {
     }
     
     func start() {
-        if TokenManager.tokenExists {
+        if AccountManager.authTokenExists || AccountManager.isPassAuth {
             showTabBarFlow()
         } else {
             showAuthFlow()
@@ -29,8 +29,8 @@ final class MainCoordinator: Coordinator {
     private func showAuthFlow() {
         let authCoordinator = AuthCoordinator(navigationController)
         authCoordinator.finishDelegate = self
-        authCoordinator.start()
         childCoordinators.append(authCoordinator)
+        authCoordinator.start()
     }
     
     private func showTabBarFlow() {
@@ -48,7 +48,6 @@ final class MainCoordinator: Coordinator {
 extension MainCoordinator: CoordinatorFinishDelegate {
     func coordinatorDidFinish(childCoordinator: Coordinator) {
         childCoordinators = childCoordinators.filter({ $0.type != childCoordinator.type })
-        
         switch childCoordinator.type {
         case .tab:
             navigationController.viewControllers.removeAll()

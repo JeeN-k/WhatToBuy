@@ -9,7 +9,7 @@ import Foundation
 
 struct FetchProductsRequest: DataRequest {
     typealias Response = ProductResponse
-    private let authToken = TokenManager.token ?? ""
+    private let authToken = AccountManager.authToken ?? ""
     let listId: String
     
     init(listId: String) {

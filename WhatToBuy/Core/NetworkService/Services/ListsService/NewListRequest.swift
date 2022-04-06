@@ -8,7 +8,7 @@
 import Foundation
 
 struct NewListRequest: DataRequest {
-    private let authToken = TokenManager.token ?? ""
+    private let authToken = AccountManager.authToken ?? ""
     var method: HTTPMethod = .post
     var productList: ProductListRequestBody
     

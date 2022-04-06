@@ -22,6 +22,16 @@ final class ExitAccountCell: UITableViewCell {
         label.center = contentView.center
     }
     
+    func configureCell(from model: SettingsLogin) {
+        if model.isLogined {
+            label.text = "Выйти"
+            label.textColor = .systemRed
+        } else {
+            label.text = "Войти"
+            label.textColor = .systemBlue
+        }
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .secondarySystemBackground

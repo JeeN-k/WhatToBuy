@@ -25,11 +25,13 @@ final class SignInViewModel: SignInViewModelProtocol {
     }
     
     func signIn(email: String, password: String, completion: @escaping(String) -> Void) {
-        let user = User(email: email, password: password)
+        let user = UserData(email: email, password: password)
         authService.signIn(user: user) { [weak self] response in
             if !response.success {
                 completion(response.message)
             } else {
+                AccountManager.setOfflineMode(is: false)
+                AccountManager.setUserPassAuth(true)
                 self?.didSentEventClosure?(.loginSuccessfully)
             }
         }

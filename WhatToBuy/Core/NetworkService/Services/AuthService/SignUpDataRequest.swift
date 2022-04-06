@@ -8,10 +8,10 @@
 import Foundation
 
 struct SignUpRequest: DataRequest {
-    private let apiKey: String = TokenManager.apiKey() ?? ""
-    let user: User
+    private let apiKey: String = AccountManager.apiKey() ?? ""
+    let user: UserData
     
-    init(user: User) {
+    init(user: UserData) {
         self.user = user
     }
     

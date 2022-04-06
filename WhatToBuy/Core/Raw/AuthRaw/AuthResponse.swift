@@ -10,5 +10,6 @@ import Foundation
 struct AuthResponse: Codable {
     var success: Bool
     var message: String
+    var userData: UserData?
     var authToken: String?
 }

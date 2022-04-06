@@ -8,21 +8,23 @@
 import Foundation
 
 protocol AuthenticationServiceProtocol {
-    func signIn(user: User, completion: @escaping((AuthResponse) -> Void))
-    func signUpNewUser(user: User, completion: @escaping((AuthResponse) -> Void))
+    func signIn(user: UserData, completion: @escaping((AuthResponse) -> Void))
+    func signUpNewUser(user: UserData, completion: @escaping((AuthResponse) -> Void))
 }
 
 class AuthenticationService: AuthenticationServiceProtocol {
     private let netoworkService = NetworkService.instance
     
-    func signIn(user: User, completion: @escaping((AuthResponse) -> Void)) {
+    func signIn(user: UserData, completion: @escaping((AuthResponse) -> Void)) {
         let signInRequest = SignInRequest(user: user)
         netoworkService.request(signInRequest) { result in
             switch result {
             case .success(let signInResponse):
-                let authToken = signInResponse.authToken
-                if signInResponse.success, let authToken = authToken {
-                    TokenManager.setAuthToken(token: authToken)
+                if signInResponse.success,
+                    let authToken = signInResponse.authToken,
+                    let userData = signInResponse.userData {
+                    AccountManager.setAuthToken(token: authToken)
+                    AccountManager.setUserData(from: userData)
                 }
                 completion(signInResponse)
             case .failure(let error):
@@ -31,7 +33,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
-    func signUpNewUser(user: User, completion: @escaping((AuthResponse) -> Void)) {
+    func signUpNewUser(user: UserData, completion: @escaping((AuthResponse) -> Void)) {
         let signUpRequest = SignUpRequest(user: user)
         netoworkService.request(signUpRequest) { result in
             switch result {

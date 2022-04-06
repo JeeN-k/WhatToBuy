@@ -8,7 +8,7 @@
 import Foundation
 
 struct BoughtUpdateRequest: DataRequest {
-    let authToken = TokenManager.token ?? ""
+    let authToken = AccountManager.authToken ?? ""
     typealias Response = BasicResponse
     
     let productId: String

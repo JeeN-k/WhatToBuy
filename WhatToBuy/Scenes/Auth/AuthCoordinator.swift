@@ -35,6 +35,7 @@ class AuthCoordinator: AuthCoordinatorProtocol {
             case .loginSuccessfully:
                 self?.finish()
             case .showRegister:
+                signInViewController.dismiss(animated: true)
                 self?.showSignUpViewController()
             }
         }
@@ -51,6 +52,7 @@ class AuthCoordinator: AuthCoordinatorProtocol {
                 self?.showSignInViewController()
             }
         }
+        
         navigationController.pushViewController(signUpViewController, animated: true)
     }
     

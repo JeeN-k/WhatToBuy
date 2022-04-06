@@ -8,7 +8,7 @@
 import Foundation
 
 struct FetchRemovedListsRequest: DataRequest {
-    let authToken = TokenManager.token ?? ""
+    let authToken = AccountManager.authToken ?? ""
     typealias Response = ProductListResponse
     
     var urlPath: String {
