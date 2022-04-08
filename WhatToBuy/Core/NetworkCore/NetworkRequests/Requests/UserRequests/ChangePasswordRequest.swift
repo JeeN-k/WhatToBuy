@@ -33,6 +33,4 @@ struct ChangePasswordRequest: DataRequest {
     var urlPath: String {
         "/users/resetPassword"
     }
-    
-    
 }

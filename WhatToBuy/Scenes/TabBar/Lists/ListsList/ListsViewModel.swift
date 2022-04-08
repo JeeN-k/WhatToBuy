@@ -18,7 +18,7 @@ protocol ListsViewModelProtocol {
 }
 
 final class ListsViewModel: ListsViewModelProtocol {
-    var dataProvider: DataProviderProtocol
+    private var dataProvider: DataProviderProtocol
     var didSentEventClosure: ((ListsViewModel.Event) -> Void)?
     var productLists: [ProductList] = []
     

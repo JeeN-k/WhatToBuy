@@ -8,7 +8,7 @@
 import Foundation
 
 struct SignUpRequest: DataRequest {
-    private let apiKey: String = AccountManager.apiKey() ?? ""
+    private let apiKey: String = AccountManager.apiKey ?? ""
     let user: UserData
     
     init(user: UserData) {

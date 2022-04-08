@@ -22,18 +22,17 @@ class SettingsCoordinator: Coordinator {
     }
     
     private func showSettingsViewController() {
-//        let dataProvider = DataProvider()
         let settingsViewModel = SettingsViewModel()
         settingsViewModel.coordinator = self
         let settingsViewController = SettingsViewConrtoller(viewModel: settingsViewModel)
-        settingsViewModel.didSentEventClosure = { event in
+        settingsViewModel.didSentEventClosure = { [weak self] event in
             switch event {
             case .login:
-                self.showAuthViewController()
+                self?.showAuthViewController()
             case .newPassword:
-                self.showChangePasswordViewController()
+                self?.showChangePasswordViewController()
             case .aboutApp:
-                self.showAboutAppViewController()
+                self?.showAboutAppViewController()
             }
         }
         navigationController.pushViewController(settingsViewController, animated: true)

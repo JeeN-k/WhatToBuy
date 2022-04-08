@@ -14,7 +14,7 @@ class NewProductCoordinator: Coordinator {
     var type: CoordinatorType { .tab }
     
     var products: [Product] = []
-    var productListID: String! // Force unwrap, но если ID тут нет, то и добавлять некуда
+    var productListID: String?
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -42,7 +42,7 @@ class NewProductCoordinator: Coordinator {
         let newProductsViewModel = NewProductViewModel(dataProvider: dataProvider,
                                                        productCategory: productCategory,
                                                        products: products,
-                                                       productListId: productListID)
+                                                       productListId: productListID ?? "0")
         newProductsViewModel.coordinator = self
         let newProductsViewConrtoller = NewProductViewController(viewModel: newProductsViewModel)
         navigationController.pushViewController(newProductsViewConrtoller, animated: true)

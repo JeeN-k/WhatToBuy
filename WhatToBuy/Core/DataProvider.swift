@@ -10,27 +10,27 @@ import Foundation
 protocol DataProviderProtocol {
     func fetchLocalProducts(completion: @escaping((ProductCategoriesBundle?) -> Void))
     func fetchLists(completion: @escaping(([ProductList]?) -> Void))
-    func createNewList(productList: ProductList)
     func fetchProduts(productListID: String, completion: @escaping([Product]?) -> Void)
-    func removeToTrashProductList(productListID: String)
-    func addProductToList(product: Product, productListID: String)
-    func deleteProduct(productId: String)
     func fetchRemovedProductLists(completion: @escaping(([ProductList]?) -> Void))
+    func fetchUserInvites(completion: @escaping(([Invite]?) -> Void))
+    func addProductToList(product: Product, productListID: String)
+    func createNewList(productList: ProductList)
+    func removeToTrashProductList(productListID: String)
+    func deleteProduct(productId: String)
+    func deleteProductList(listId: String)
     func updateProductList(productList: ProductList, productListID: String)
     func updateProduct(product: Product, completion: @escaping()->())
+    func updateProductIsBought(productId: String, isBought: Bool)
     func inviteUserToList(email: String, listId: String, completion: @escaping(BasicResponse?) -> Void)
-    func fetchUserInvites(completion: @escaping(([Invite]?) -> Void))
     func answerToInvite(answerType: AnswerInviteType, listId: String)
     func restoreFromTrashProductList(listId: String)
-    func deleteProductList(listId: String)
-    func productIsBoughtUpdate(productId: String, isBought: Bool)
     func changeUserPassword(oldPassword: String, newPassword: String, completion: @escaping(BasicResponse?) -> Void)
 }
 
 class DataProvider: DataProviderProtocol {
-    private let bundleLoader = BundleContentLoader()
-    private let coreDataManager = CoreDataManager.instance
-    private let networkService = NetworkService.instance
+    private let bundleLoader = BundleService.instance
+    private let coreDataManager = CoreDataService.instance
+    private let networkService = NetworkCore.instance
     
     private var isOfflineMode:Bool {
         !AccountManager.authTokenExists || AccountManager.isOfflineMode
@@ -45,8 +45,8 @@ class DataProvider: DataProviderProtocol {
             let fetchListsRequest = FetchListsRequest()
             networkService.request(fetchListsRequest) { result in
                 switch result {
-                case .success(let lists):
-                    completion(lists.data)
+                case .success(let response):
+                    completion(response.data)
                 case .failure(let error):
                     print(error)
                 }
@@ -87,11 +87,8 @@ class DataProvider: DataProviderProtocol {
     }
     
     func fetchLocalProducts(completion: @escaping ((ProductCategoriesBundle?) -> Void)) {
-        do {
-            let localProducts = try bundleLoader.loadBundledContent(fromFileNamed: "productsjs")
-            completion(localProducts)
-        } catch {
-            print(error)
+        bundleLoader.fetchListOfLocalProducts { bundleProducts in
+            completion(bundleProducts)
         }
     }
     
@@ -278,7 +275,7 @@ class DataProvider: DataProviderProtocol {
         }
     }
     
-    func productIsBoughtUpdate(productId: String, isBought: Bool) {
+    func updateProductIsBought(productId: String, isBought: Bool) {
         if isOfflineMode {
             coreDataManager.productBoughtUpdate(productId: productId, isBought: isBought)
         } else {

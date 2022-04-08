@@ -61,7 +61,7 @@ final class AboutViewController: UIViewController {
                              width: defaultImageSize.width,
                              height: defaultImageSize.height)
         
-        let scrollViewHeight = descriptionLabel.frame.height + 20 + (30 * 4) + (defaultImageSize.height * 4)
+        let scrollViewHeight = cardView.frame.height + 20 + (30 * 4) + (defaultImageSize.height * 4)
         scrollView.contentSize = CGSize(width: view.frame.width, height: scrollViewHeight)
     }
 }

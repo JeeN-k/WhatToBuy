@@ -39,13 +39,19 @@ class AddListViewController: UIViewController {
 extension AddListViewController {
     private func configureView() {
         title = "Новый список"
+        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done,
+                                            target: self,
+                                            action: #selector(addListTouched))
+        doneBarButton.isEnabled = false
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
                                                            target: self,
                                                            action: #selector(cancelAddingTouched))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
-                                                            target: self,
-                                                            action: #selector(addListTouched))
+        navigationItem.rightBarButtonItem = doneBarButton
+        
+        editView.didTextChanged = { isTestEmpty in
+            doneBarButton.isEnabled = !isTestEmpty
+        }
     }
     
     @objc

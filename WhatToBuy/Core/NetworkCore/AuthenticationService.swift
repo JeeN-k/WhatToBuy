@@ -13,7 +13,7 @@ protocol AuthenticationServiceProtocol {
 }
 
 class AuthenticationService: AuthenticationServiceProtocol {
-    private let netoworkService = NetworkService.instance
+    private let netoworkService = NetworkCore.instance
     
     func signIn(user: UserData, completion: @escaping((AuthResponse) -> Void)) {
         let signInRequest = SignInRequest(user: user)

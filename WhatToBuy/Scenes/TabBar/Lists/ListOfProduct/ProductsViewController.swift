@@ -176,7 +176,6 @@ extension ProductsViewController {
     @objc
     private func newProductTouched() {
         viewModel.openNewProductFlow()
-//        showNewProductAlert()
     }
     
     @objc

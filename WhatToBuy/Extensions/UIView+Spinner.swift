@@ -12,7 +12,7 @@ extension UIView {
         let backgroundView = UIView()
         backgroundView.frame = CGRect.init(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
         backgroundView.backgroundColor = backgroundColor
-        backgroundView.tag = 475647
+        backgroundView.tag = 88997722
         
         var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
         activityIndicator = UIActivityIndicatorView(frame: CGRect.init(x: 0, y: 0, width: 50, height: 50))
@@ -29,7 +29,7 @@ extension UIView {
     }
 
     func activityStopAnimating() {
-        if let background = viewWithTag(475647){
+        if let background = viewWithTag(88997722){
             background.removeFromSuperview()
         }
         self.isUserInteractionEnabled = true

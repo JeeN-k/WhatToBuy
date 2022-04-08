@@ -18,6 +18,23 @@ class NewProductViewController: UIViewController {
         tableView.register(NewProductCellView.self, forCellReuseIdentifier: "newProductCell")
         return tableView
     }()
+    
+    private lazy var searchController: UISearchController = {
+        let searchBar = UISearchController()
+        searchBar.obscuresBackgroundDuringPresentation = false
+        searchBar.searchBar.placeholder = "Поиск"
+        searchBar.searchResultsUpdater = self
+        return searchBar
+    }()
+    
+    var isSearchBarEmpty: Bool {
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    var isSearching: Bool {
+        return searchController.isActive && !isSearchBarEmpty
+    }
+    
     var viewModel: NewProductViewModelProtocol
     
     init(viewModel: NewProductViewModelProtocol) {
@@ -41,7 +58,7 @@ class NewProductViewController: UIViewController {
 //MARK: - UITableViewDelegate & UITableViewDataSource
 extension NewProductViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.productCategory.items.count
+        return viewModel.numberOfRows(isSearching: isSearching)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -51,13 +68,21 @@ extension NewProductViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "newProductCell", for: indexPath)
                 as? NewProductCellView else { return UITableViewCell() }
-        cell.viewModel = viewModel.viewModelForCell(at: indexPath)
+        cell.viewModel = viewModel.viewModelForCell(at: indexPath, isSearching: isSearching)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.productTouched(at: indexPath)
+        viewModel.productTouched(at: indexPath, isSearching: isSearching)
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension NewProductViewController: UISearchControllerDelegate, UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text else { return }
+        viewModel.filterProductsWith(text: searchText)
+        self.tableView.reloadData()
     }
 }
 
@@ -69,6 +94,8 @@ extension NewProductViewController {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
         
+        definesPresentationContext = true
+        navigationItem.searchController = searchController
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([

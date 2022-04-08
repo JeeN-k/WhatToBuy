@@ -7,6 +7,10 @@
 
 import Foundation
 
+protocol Responsable {
+    associatedtype Response
+}
+
 enum HTTPMethod: String {
     case get = "GET"
     case post = "POST"
@@ -15,9 +19,7 @@ enum HTTPMethod: String {
     case delete = "DELETE"
 }
 
-// 2
-protocol DataRequest {
-    associatedtype Response
+protocol DataRequest:Responsable {
     
     var baseUrl: String { get }
     var urlPath: String { get }
@@ -29,7 +31,6 @@ protocol DataRequest {
     func decode(_ data: Data) throws -> Response
 }
 
-// 3
 extension DataRequest where Response: Decodable {
     func decode(_ data: Data) throws -> Response {
         let decoder = JSONDecoder()
@@ -37,7 +38,6 @@ extension DataRequest where Response: Decodable {
     }
 }
 
-// 4
 extension DataRequest {
     
     var baseUrl: String {

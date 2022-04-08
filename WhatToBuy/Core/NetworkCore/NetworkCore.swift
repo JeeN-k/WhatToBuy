@@ -12,15 +12,15 @@ enum RequestErrors: Error {
     case responseError
 }
 
-protocol NetworkServiceProtocol {
+protocol NetworkCoreProtocol {
     func request<Request: DataRequest>(_ request: Request, completion: @escaping (Result<Request.Response, Error>) -> Void)
 }
 
-final class NetworkService {
-    static let instance: NetworkServiceProtocol = NetworkService()
+final class NetworkCore {
+    static let instance: NetworkCoreProtocol = NetworkCore()
 }
 
-extension NetworkService: NetworkServiceProtocol {
+extension NetworkCore: NetworkCoreProtocol {
     func request<Request: DataRequest>(_ request: Request, completion: @escaping (Result<Request.Response, Error>) -> Void) {
         guard var urlComponent = URLComponents(string: request.baseUrl + request.urlPath) else {
             completion(.failure(RequestErrors.invalidEndPoint))

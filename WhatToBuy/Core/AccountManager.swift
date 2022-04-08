@@ -31,7 +31,14 @@ class AccountManager {
         return isPassAuth
     }
     
-    static var authTokenExists: Bool { return authToken != nil}
+    static var apiKey: String? {
+        guard let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String else { return nil }
+        return apiKey
+    }
+    
+    static var authTokenExists: Bool {
+        return authToken != nil
+    }
     
     static func setAuthToken(token: String) {
         userDefaults.set(token, forKey: "token")
@@ -52,10 +59,5 @@ class AccountManager {
     
     static func removeAuthToken() {
         userDefaults.removeObject(forKey: "token")
-    }
-    
-    static func apiKey() -> String? {
-        guard let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String else { return nil }
-        return apiKey
     }
 }

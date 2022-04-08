@@ -116,7 +116,7 @@ final class ProductsViewModel: ProductsViewModelProtocol {
     func updateIsBought(at indexPath: IndexPath) {
         let product = productSection[indexPath.section].products[indexPath.row]
         productSection[indexPath.section].products[indexPath.row].isBought.toggle()
-        dataProvider.productIsBoughtUpdate(productId: product._id, isBought: !product.isBought)
+        dataProvider.updateProductIsBought(productId: product._id, isBought: !product.isBought)
         productSection[indexPath.section].products.sort { !$0.isBought && $1.isBought}
     }
 }

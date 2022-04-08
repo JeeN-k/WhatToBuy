@@ -9,10 +9,11 @@ import Foundation
 
 protocol NewProductViewModelProtocol {
     var products: Observable<[Product]> { get }
-    var productCategory: ProductSectionsBundle { get }
     func titleForView() -> String
-    func viewModelForCell(at indexPath: IndexPath) -> NewProductCellViewModel
-    func productTouched(at indexPath: IndexPath)
+    func viewModelForCell(at indexPath: IndexPath, isSearching: Bool) -> NewProductCellViewModel
+    func productTouched(at indexPath: IndexPath, isSearching: Bool)
+    func filterProductsWith(text: String)
+    func numberOfRows(isSearching: Bool) -> Int
 }
 
 final class NewProductViewModel: NewProductViewModelProtocol {
@@ -20,12 +21,14 @@ final class NewProductViewModel: NewProductViewModelProtocol {
     let dataProvider: DataProviderProtocol
     var productCategory: ProductSectionsBundle
     var products: Observable<[Product]> = Observable([])
+    var filteredProducts: [String] = []
     private var productListId: String
     
     init(dataProvider: DataProviderProtocol, productCategory: ProductSectionsBundle, products: [Product], productListId: String) {
         self.dataProvider = dataProvider
         self.productCategory = productCategory
         self.products.value = products
+        self.filteredProducts = productCategory.items
         self.productListId = productListId
     }
     
@@ -33,14 +36,26 @@ final class NewProductViewModel: NewProductViewModelProtocol {
         return productCategory.name
     }
     
-    func viewModelForCell(at indexPath: IndexPath) -> NewProductCellViewModel {
-        let product = productCategory.items[indexPath.row]
-        let isContains = products.value.contains(where: { $0.name == product })
-        return NewProductCellViewModel(isAdded: isContains, name: product)
+    func filterProductsWith(text: String) {
+        filteredProducts = productCategory.items.filter({ $0.lowercased().contains(text.lowercased()) })
     }
     
-    func productTouched(at indexPath: IndexPath) {
-        let productName = productCategory.items[indexPath.row]
+    func numberOfRows(isSearching: Bool) -> Int {
+        if isSearching {
+            return filteredProducts.count
+        } else {
+            return productCategory.items.count
+        }
+    }
+    
+    func viewModelForCell(at indexPath: IndexPath, isSearching: Bool) -> NewProductCellViewModel {
+        let productName = !isSearching ? productCategory.items[indexPath.row] : filteredProducts[indexPath.row]
+        let isContains = products.value.contains(where: { $0.name == productName })
+        return NewProductCellViewModel(isAdded: isContains, name: productName)
+    }
+    
+    func productTouched(at indexPath: IndexPath, isSearching: Bool) {
+        let productName = !isSearching ? productCategory.items[indexPath.row] : filteredProducts[indexPath.row]
         let isContains = products.value.contains(where: { $0.name == productName })
         if !isContains {
             let product = Product(name: productName,

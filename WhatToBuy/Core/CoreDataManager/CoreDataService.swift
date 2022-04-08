@@ -7,7 +7,7 @@
 
 import CoreData
 
-protocol CoreDataManagerProtocol {
+protocol CoreDataServiceProtocol {
     func saveProductList(productList: ProductList)
     func fetchProductList(_ completion: @escaping(([ProductList]) -> Void))
     func addProductToProductList(id: String, product: Product)
@@ -22,9 +22,9 @@ protocol CoreDataManagerProtocol {
     func productBoughtUpdate(productId: String, isBought: Bool)
 }
 
-final class CoreDataManager {
+final class CoreDataService {
     
-    static let instance: CoreDataManagerProtocol = CoreDataManager()
+    static let instance: CoreDataServiceProtocol = CoreDataService()
     
     private lazy var persistentContainer: NSPersistentContainer = {
         let persistentContainer = NSPersistentContainer(name: "WhatToBuyApp")
@@ -41,7 +41,7 @@ final class CoreDataManager {
     }
 }
 
-extension CoreDataManager: CoreDataManagerProtocol {
+extension CoreDataService: CoreDataServiceProtocol {
     
     func saveProductList(productList: ProductList) {
         let productListMO = ProductListMO(context: moc)
@@ -183,7 +183,7 @@ extension CoreDataManager: CoreDataManagerProtocol {
     }
 }
 
-extension CoreDataManager {
+extension CoreDataService {
     private func getProductListById(_ id: String) -> ProductListMO? {
         let fetchRequest: NSFetchRequest<ProductListMO> = ProductListMO.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id = %@", id)

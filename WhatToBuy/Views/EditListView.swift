@@ -18,6 +18,7 @@ class EditListView: UIView {
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.font = UIFont.systemFont(ofSize: 22)
         textField.placeholder = "Название"
+        textField.addTarget(self, action: #selector(nameTextChanged), for: .editingChanged)
         return textField
     }()
     
@@ -37,6 +38,8 @@ class EditListView: UIView {
         pickerView.tintColor = .blue
         return pickerView
     }()
+    
+    var didTextChanged: ((Bool) -> Void)?
     
     var viewModel: EditableList
     
@@ -113,5 +116,11 @@ extension EditListView {
             iconPicker.trailingAnchor.constraint(equalTo: trailingAnchor),
             iconPicker.bottomAnchor.constraint(equalTo: centerYAnchor, constant: 50)
         ])
+    }
+    
+    @objc
+    func nameTextChanged() {
+        let isTextEmpty = nameTextField.text == ""
+        didTextChanged?(isTextEmpty)
     }
 }
